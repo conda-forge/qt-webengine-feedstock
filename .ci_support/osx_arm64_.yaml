@@ -1,0 +1,54 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '11.0'
+c_compiler:
+- clang
+c_compiler_version:
+- '11'
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- clangxx
+cxx_compiler_version:
+- '11'
+gst_plugins_base:
+- '1.18'
+gstreamer:
+- '1.18'
+icu:
+- '69'
+libiconv:
+- '1.16'
+libpng:
+- '1.6'
+libwebp:
+- '1'
+macos_machine:
+- arm64-apple-darwin20.0.0
+nspr:
+- '4'
+nss:
+- '3'
+pin_run_as_build:
+  libiconv:
+    max_pin: x.x
+  libpng:
+    max_pin: x.x
+  nspr:
+    max_pin: x
+  nss:
+    max_pin: x
+  sqlite:
+    max_pin: x
+  zlib:
+    max_pin: x.x
+sqlite:
+- '3'
+target_platform:
+- osx-arm64
+zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
+zlib:
+- '1.2'
