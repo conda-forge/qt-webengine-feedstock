@@ -72,9 +72,10 @@ if [[ $(uname) == "Darwin" ]]; then
 
     # Qt passes clang flags to LD (e.g. -stdlib=c++)
     export LD=${CXX}
-    PATH=${PWD}:${PATH}
+    export PATH=${PWD}:${PATH}
+
     # Use xcode-avoidance scripts
-    PATH=$PREFIX/bin/xc-avoidance:$PATH
+    export PATH=$PREFIX/bin/xc-avoidance:$PATH
 
     export APPLICATION_EXTENSION_API_ONLY=NO
 
