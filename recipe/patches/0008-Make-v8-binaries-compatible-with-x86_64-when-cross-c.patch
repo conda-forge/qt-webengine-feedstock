@@ -17,8 +17,8 @@ index 13ffc2c3391..88065ea85bf 100644
        ldflags = [ "-pie" ]
      }
 +    
-+    ldflags += ["-arch x86_64 -arch arm64"]
-+    cflags += ["-arch x86_64 -arch arm64"]
++    ldflags = ["-arch x86_64 -arch arm64"]
++    cflags = ["-arch x86_64 -arch arm64"]
 +    
      if (defined(testonly) && testonly && v8_code_coverage) {
        # Only add code coverage cflags for non-test files for performance
