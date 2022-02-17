@@ -1,0 +1,33 @@
+From 05aeff831c444e2e2b83a90854ef5761ffb71387 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Edgar=20Andr=C3=A9s=20Margffoy=20Tuay?= <andfoy@gmail.com>
+Date: Thu, 17 Feb 2022 16:42:59 -0500
+Subject: [PATCH] Make brotli run in x86_64 when cross-compiling on arm64
+
+---
+ chromium/third_party/brotli/BUILD.gn | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/chromium/third_party/brotli/BUILD.gn b/chromium/third_party/brotli/BUILD.gn
+index f2c816f640e..2c6b514679c 100644
+--- a/chromium/third_party/brotli/BUILD.gn
++++ b/chromium/third_party/brotli/BUILD.gn
+@@ -174,12 +174,16 @@ if (current_toolchain == host_toolchain) {
+       ":headers",
+       "//build/win:default_exe_manifest",
+     ]
++    
+ 
+     if (is_win && visual_studio_version == "2015") {
+       # Disabling "result of 32-bit shift implicitly converted to 64 bits",
+       # caused by code like: foo |= (1 << i);   // warning 4334
+       cflags = [ "/wd4334" ]
+     }
++    
++    cflags += ["-arch arm64 -arch x86_64"]
++    ldflags += ["-arch arm64 -arch x86_64"]
+ 
+     # Always build release since this is a build tool.
+     if (is_debug) {
+-- 
+2.25.1
+
