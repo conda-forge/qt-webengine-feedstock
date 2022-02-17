@@ -23,8 +23,8 @@ index f2c816f640e..2c6b514679c 100644
        cflags = [ "/wd4334" ]
      }
 +    
-+    cflags += ["-arch arm64 -arch x86_64"]
-+    ldflags += ["-arch arm64 -arch x86_64"]
++    cflags = ["-arch arm64 -arch x86_64"]
++    ldflags = ["-arch arm64 -arch x86_64"]
  
      # Always build release since this is a build tool.
      if (is_debug) {
