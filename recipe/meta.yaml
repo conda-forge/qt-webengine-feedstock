@@ -20,7 +20,7 @@ source:
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch   # [osx]
       - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
       - patches/0008-Make-v8-binaries-compatible-with-x86_64-when-cross-c.patch  # [arm64]
-      - patches/0009-Make-brotli-run-in-x86_64-when-cross-compiling-on-ar.patch  # [arm64]
+      - patches/0009-Compile-brotli-for-for-both-x86_64-and-arm64-when-cr.patch  # [arm64]
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
