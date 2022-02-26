@@ -1,0 +1,39 @@
+From b5350a7ee50b758d83bb8d8cd8cd874fedb6e254 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Edgar=20Andr=C3=A9s=20Margffoy=20Tuay?= <andfoy@gmail.com>
+Date: Fri, 25 Feb 2022 19:48:27 -0500
+Subject: [PATCH] Set host and target cpus in gn build
+
+---
+ chromium/build/config/BUILDCONFIG.gn | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/chromium/build/config/BUILDCONFIG.gn b/chromium/build/config/BUILDCONFIG.gn
+index 3815dd6f941..04c7af0afc9 100644
+--- a/chromium/build/config/BUILDCONFIG.gn
++++ b/chromium/build/config/BUILDCONFIG.gn
+@@ -50,6 +50,14 @@ if (target_os == "") {
+   target_os = host_os
+ }
+ 
++# current_cpu = "x64"
++target_cpu = "arm64"
++host_cpu = "x64"
++
++default_toolchain = getenv("HOST")
++host_toolchain = getenv("BUILD")
++# current_toolchain = getenv("BUILD")
++
+ if (target_cpu == "") {
+   if (target_os == "android") {
+     # If we're building for Android, we should assume that we want to
+@@ -69,6 +77,7 @@ if (current_os == "") {
+   current_os = target_os
+ }
+ 
++
+ # =============================================================================
+ # BUILD FLAGS
+ # =============================================================================
+-- 
+2.25.1
+
