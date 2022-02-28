@@ -1,0 +1,27 @@
+From e72f47d6948b3f9d8aec66a1b43d97bfd1b50665 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Edgar=20Andr=C3=A9s=20Margffoy=20Tuay?= <andfoy@gmail.com>
+Date: Thu, 17 Feb 2022 13:07:20 -0500
+Subject: [PATCH] Compile GN to support both x86_64 and arm64 archs when
+ crosscompiling on MacOs
+
+---
+ gn/build/gen.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/gn/build/gen.py b/gn/build/gen.py
+index 2a37cb4e1ac..a23fac8befe 100755
+--- a/gn/build/gen.py
++++ b/gn/build/gen.py
+@@ -331,6 +331,9 @@ def WriteGNNinja(path, platform, host, options):
+       ldflags.extend(['-fdata-sections', '-ffunction-sections'])
+       if platform.is_darwin():
+         ldflags.append('-Wl,-dead_strip')
++        ldflags.append('-arch x86_64 -arch arm64')
++        cflags.append('-arch x86_64 -arch arm64')
++        cflags_cc.append('-arch x86_64 -arch arm64')
+       elif not platform.is_aix():
+         # Garbage collection is done by default on aix.
+         ldflags.append('-Wl,--gc-sections')
+-- 
+2.25.1
+

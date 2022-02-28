@@ -13,18 +13,19 @@ source:
     git_rev: 87-based
     folder: qtwebengine-chromium
     patches:
-      - patches/0001-aarch64-sys-state-structs.patch       # [aarch64]
-      - patches/0002-macos-fatal-warnings.patch            # [osx]
-      - patches/0003-macos-arm64-chromium.patch            # [arm64]
-      - patches/0004-macos-arm64-float16-conv.patch        # [arm64]
-      - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch   # [osx]
+      - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
+      - patches/0002-macos-fatal-warnings.patch                                  # [osx]
+      - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
+      - patches/0004-macos-arm64-float16-conv.patch                              # [arm64]
+      - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
+      - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -124,7 +125,7 @@ requirements:
   run:
     - libwebp
   run_constrained:
-    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx]
+    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
     - qt {{ version }}
 
 test:
