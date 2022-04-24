@@ -87,8 +87,7 @@ requirements:
     - bison                              # [linux]
     - flex                               # [linux]
     - gperf                              # [linux]
-    - perl 5.*
-    - readline                           # [linux]
+    - perl 5
     - jom                                # [win]
     - nodejs >=16
   host:
