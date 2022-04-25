@@ -126,9 +126,10 @@ requirements:
     - libwebp
   run_constrained:
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
-    # Qt 5.15.3 was only ever released for commercial users.
-    # https://www.qt.io/blog/commercial-lts-qt-5.15.3-released
-    - qt >=5.15.2,<6.0.0a0
+    # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
+    # users. However it seems that qt webengine 5.15.4 sources were
+    # released
+    - qt >=5.15.3,<5.15.5a0
     # - qt {{ version }}
 
 test:
