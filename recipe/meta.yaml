@@ -119,7 +119,8 @@ requirements:
     - sqlite
     - zlib
     - libxcb                             # [linux]
-    - qt-main
+    # Matches the other migrations that we care for this feedstock
+    - qt-main    5.15.3
     - libwebp
     - openssl                            # [win]
   run:
@@ -129,7 +130,7 @@ requirements:
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
     # users. However it seems that qt webengine 5.15.4 sources were
     # released
-    - qt >=5.15.3,<5.15.5a0
+    - qt 5.15.3|5.15.4
     # - qt {{ version }}
 
 test:
