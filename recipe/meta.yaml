@@ -17,7 +17,6 @@ source:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
       - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
-      - patches/0004-macos-arm64-float16-conv.patch                              # [arm64]
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
       - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
 
