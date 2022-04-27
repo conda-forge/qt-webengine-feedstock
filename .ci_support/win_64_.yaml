@@ -7,11 +7,11 @@ channel_targets:
 cxx_compiler:
 - vs2017
 gst_plugins_base:
-- '1.18'
+- '1.20'
 gstreamer:
-- '1.18'
+- '1.20'
 icu:
-- '69'
+- '70'
 libiconv:
 - '1.16'
 libpng:

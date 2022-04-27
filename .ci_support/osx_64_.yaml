@@ -5,7 +5,7 @@ MACOSX_SDK_VERSION:
 c_compiler:
 - clang
 c_compiler_version:
-- '11'
+- '13'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -13,13 +13,13 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '11'
+- '13'
 gst_plugins_base:
-- '1.18'
+- '1.20'
 gstreamer:
-- '1.18'
+- '1.20'
 icu:
-- '69'
+- '70'
 libiconv:
 - '1.16'
 libpng:
