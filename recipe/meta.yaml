@@ -1,5 +1,6 @@
 {% set name = "qt-webengine" %}
 {% set version = "5.15.4" %}
+{% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
   name: {{ name|lower }}
@@ -16,7 +17,6 @@ source:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
       - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
-      - patches/0004-macos-arm64-float16-conv.patch                              # [arm64]
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
       - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
 
@@ -25,7 +25,7 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 1
+  number: 2
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -86,8 +86,7 @@ requirements:
     - bison                              # [linux]
     - flex                               # [linux]
     - gperf                              # [linux]
-    - perl 5.*
-    - readline                           # [linux]
+    - perl 5
     - jom                                # [win]
     - nodejs >=16
   host:
@@ -119,14 +118,19 @@ requirements:
     - sqlite
     - zlib
     - libxcb                             # [linux]
-    - qt-main
+    # Matches the other migrations that we care for this feedstock
+    - qt-main    5.15.3
     - libwebp
     - openssl                            # [win]
   run:
     - libwebp
   run_constrained:
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
-    - qt {{ version }}
+    # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
+    # users. However it seems that qt webengine 5.15.4 sources were
+    # released
+    - qt 5.15.3|5.15.4
+    # - qt {{ version }}
 
 test:
   requires:
