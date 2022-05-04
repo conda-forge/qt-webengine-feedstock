@@ -171,6 +171,9 @@ test:
     - test/qrc_qml.cpp
     - test/main.qml
     - test/qtwebengine.pro
+  commands:
+    - if not exist %LIBRARY_BIN%\\Qt5WebEngine.dll exit 1                  # [win]
+    - test -f $PREFIX/lib/libQt5WebEngine${SHLIB_EXT}                      # [unix]
 
 about:
   home: http://qt.io
