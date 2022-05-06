@@ -88,7 +88,7 @@ if [[ $(uname) == "Darwin" ]]; then
       EXTRA_FLAGS="QMAKE_APPLE_DEVICE_ARCHS=arm64"
     fi
 
-    if [[ "$CONDA_BUILD_CROSS_COMPILATION" == "1" ]]; then
+    if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
       # Get arm64 sysconfigdata for the python2_hack
       cp ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_x86_64_apple_darwin13_4_0.py ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_arm64_apple_darwin20_0_0.py
     fi
@@ -108,7 +108,7 @@ if [[ $(uname) == "Darwin" ]]; then
         $EXTRA_FLAGS \
         QMAKE_LFLAGS+="-Wno-everything -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib" \
         PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
-        ..
+        .. -- -webengine-icu
 
     # find . -type f -exec sed -i '' -e 's/-Wl,-fatal_warnings//g' {} +
     # sed -i '' -e 's/-Werror//' $PREFIX/mkspecs/features/qt_module_headers.prf
