@@ -59,7 +59,7 @@ if [[ $(uname) == "Linux" ]]; then
         QMAKE_LFLAGS+="-Wl,-rpath,$PREFIX/lib -Wl,-rpath-link,$PREFIX/lib -L$PREFIX/lib" \
         INCLUDEPATH+="${PREFIX}/include" \
         PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
-        ..
+        .. -- -webengine-icu
 
     #cat config.log
     #exit 1
