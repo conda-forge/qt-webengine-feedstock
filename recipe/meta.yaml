@@ -110,6 +110,7 @@ requirements:
     - libxkbcommon                       # [linux]
     - expat                              # [linux]
     - libevent                           # [linux]
+    - libxslt                            # [linux]
     - icu
     - libpng
     - libiconv
