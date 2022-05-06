@@ -102,15 +102,17 @@ requirements:
     - pthread-stubs                      # [linux]
     - dbus                               # [linux]
     - fontconfig                         # [linux]
-    - freetype                           # [linux]
+    - freetype                           # [unix]
     - gst-plugins-base
     - gstreamer
-    - libglib                            # [linux]
-    - libxml2                            # [linux]
+    - libglib                            # [unix]
+    - libxml2                            # [unix]
     - libxkbcommon                       # [linux]
     - expat                              # [linux]
     - libevent                           # [linux]
-    - libxslt                            # [linux]
+    - libxslt                            # [unix]
+    - re2                                # [unix]
+    - lcms2                              # [unix]
     - icu
     - libpng
     - libiconv
