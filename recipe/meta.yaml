@@ -102,7 +102,7 @@ requirements:
     - pthread-stubs                      # [linux]
     - dbus                               # [linux]
     - fontconfig                         # [linux]
-    - freetype                           # [unix]
+    - freetype                           # [linux]
     - gst-plugins-base
     - gstreamer
     - libglib                            # [unix]
