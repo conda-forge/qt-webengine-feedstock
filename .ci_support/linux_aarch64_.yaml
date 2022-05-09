@@ -71,6 +71,8 @@ pin_run_as_build:
     max_pin: x.x
 pulseaudio:
 - '14.0'
+re2:
+- 2022.02.01
 sqlite:
 - '3'
 target_platform:

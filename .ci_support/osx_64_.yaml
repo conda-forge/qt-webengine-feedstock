@@ -26,6 +26,8 @@ libpng:
 - '1.6'
 libwebp:
 - '1'
+libxml2:
+- '2.9'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 nspr:
@@ -37,6 +39,8 @@ pin_run_as_build:
     max_pin: x.x
   libpng:
     max_pin: x.x
+  libxml2:
+    max_pin: x.x
   nspr:
     max_pin: x
   nss:
@@ -45,6 +49,8 @@ pin_run_as_build:
     max_pin: x
   zlib:
     max_pin: x.x
+re2:
+- 2022.02.01
 sqlite:
 - '3'
 target_platform:
