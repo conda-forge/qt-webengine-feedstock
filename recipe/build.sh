@@ -1,3 +1,12 @@
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./src/3rdparty/chromium/third_party/nasm/autoconf/helpers
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./qtwebengine-chromium/chromium/third_party/icu/source
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./src/3rdparty/chromium/third_party/icu/source
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./src/3rdparty/chromium/third_party/sqlite/src
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./qtwebengine-chromium/chromium/third_party/sqlite/src
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./qtwebengine-chromium/chromium/third_party/breakpad/breakpad/autotools
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./src/3rdparty/chromium/third_party/breakpad/breakpad/autotools
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./qtwebengine-chromium/chromium/third_party/nasm/autoconf/helpers
 set -exou
 
 if [[ $(arch) == "aarch64" || $(uname) == "Darwin" ]]; then
