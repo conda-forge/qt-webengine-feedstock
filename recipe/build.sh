@@ -87,6 +87,11 @@ if [[ $(uname) == "Darwin" ]]; then
     if [[ $(arch) == "arm64" ]]; then
       EXTRA_FLAGS="QMAKE_APPLE_DEVICE_ARCHS=arm64"
     fi
+    
+    if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
+       # Get arm64 sysconfigdata for the python2_hack
+       cp ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_x86_64_apple_darwin13_4_0.py ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_arm64_apple_darwin20_0_0.py
+    fi
 
     # Set QMake prefix to $PREFIX
     qmake -set prefix $PREFIX
