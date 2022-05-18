@@ -89,8 +89,8 @@ if [[ $(uname) == "Darwin" ]]; then
     fi
     
     if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
-       # Get arm64 sysconfigdata for the python2_hack
-       cp ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_x86_64_apple_darwin13_4_0.py ${SRC_DIR}/python2_hack/lib/python2.7/_sysconfigdata_arm64_apple_darwin20_0_0.py
+      # The python2_hack does not know about _sysconfigdata_arm64_apple_darwin20_0_0, so unset the data name
+      unset _CONDA_PYTHON_SYSCONFIGDATA_NAME
     fi
 
     # Set QMake prefix to $PREFIX
