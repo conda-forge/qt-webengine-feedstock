@@ -1,37 +1,25 @@
-setlocal enableextensions enabledelayedexpansion
 
-git config --system core.longpaths true
+mkdir build && cd build
+cmake -LAH -G "Ninja" ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
+    -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
+    -DINSTALL_BINDIR=lib/qt6/bin ^
+    -DINSTALL_PUBLICBINDIR=bin ^
+    -DINSTALL_LIBEXECDIR=lib/qt6 ^
+    -DINSTALL_DOCDIR=share/doc/qt6 ^
+    -DINSTALL_ARCHDATADIR=lib/qt6 ^
+    -DINSTALL_DATADIR=share/qt6 ^
+    -DINSTALL_INCLUDEDIR=include/qt6 ^
+    -DINSTALL_MKSPECSDIR=lib/qt6/mkspecs ^
+    -DINSTALL_EXAMPLESDIR=share/doc/qt6/examples ^
+    -DINSTALL_DATADIR=share/qt6 ^
+    -DGPerf_EXECUTABLE=%BUILD_PREFIX%\Library\usr\bin\gperf.exe ^
+    -DBISON_EXECUTABLE=%BUILD_PREFIX%\Library\bin\win_bison.exe ^
+    -DFLEX_EXECUTABLE=%BUILD_PREFIX%\Library\bin\win_flex.exe ^
+    -DFEATURE_webengine_build_gn=OFF ^
+    ..
+if errorlevel 1 exit 1
 
-set LIBRARY_PATHS=-I %LIBRARY_INC%
-
-pushd %LIBRARY_INC%
-for /F "usebackq delims=" %%F in (`dir /b /ad-h`) do (
-    set LIBRARY_PATHS=!LIBRARY_PATHS! -I %LIBRARY_INC%\%%F
-)
-popd
-endlocal
-
-:: Chromium requires Python 2.7 to generate compilation outputs.
-cmd /c "conda create -y -q --prefix "%SRC_DIR%\win_python" python=2.7 -c pkgs/main"
-set PATH=%SRC_DIR%\win_python;%PATH%
-
-set PATH=%cd%\jom;%PATH%
-SET PATH=%cd%\gnuwin32\gnuwin32\bin;%cd%\gnuwin32\bin;%PATH%
-
-mkdir b
-pushd b
-
-where jom
-
-:: Set QMake prefix to LIBRARY_PREFIX
-qmake -set prefix %LIBRARY_PREFIX%
-
-qmake QMAKE_LIBDIR=%LIBRARY_LIB% ^
-      QMAKE_BINDIR=%LIBRARY_BIN% ^
-      INCLUDEPATH+="%LIBRARY_INC%" ^
-      ..
-
-echo on
-
-jom
-jom install
+cmake --build . --target install --config Release
+if errorlevel 1 exit 1
