@@ -3,7 +3,7 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '13'
+- '14'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,13 +11,13 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '13'
+- '14'
 gst_plugins_base:
-- '1.20'
+- '1.21'
 gstreamer:
-- '1.20'
+- '1.21'
 libiconv:
-- '1.16'
+- '1'
 libpng:
 - '1.6'
 libwebp:
@@ -28,19 +28,6 @@ nspr:
 - '4'
 nss:
 - '3'
-pin_run_as_build:
-  libiconv:
-    max_pin: x.x
-  libpng:
-    max_pin: x.x
-  nspr:
-    max_pin: x
-  nss:
-    max_pin: x
-  sqlite:
-    max_pin: x
-  zlib:
-    max_pin: x.x
 sqlite:
 - '3'
 target_platform:
