@@ -1,30 +1,14 @@
 set -exou
 
-if [[ $(arch) == "aarch64" || $(uname) == "Darwin" ]]; then
-pushd qtwebengine-chromium
-
-# Ensure that Chromium is built using the correct sysroot in Mac
-awk 'NR==77{$0="    rebase_path(\"'$CONDA_BUILD_SYSROOT'\", root_build_dir),"}1' chromium/build/config/mac/BUILD.gn > chromium/build/config/mac/BUILD.gn.tmp
-rm chromium/build/config/mac/BUILD.gn
-mv chromium/build/config/mac/BUILD.gn.tmp chromium/build/config/mac/BUILD.gn
-
-git config user.name 'Anonymous'
-git config user.email '<>'
-
-git add -A
-git commit -m "Patches"
-popd
-fi
-
-git submodule init
-git submodule set-url src/3rdparty "$SRC_DIR"/qtwebengine-chromium
-git submodule set-branch --branch 87-based src/3rdparty
-git submodule update
-
-pushd src/3rdparty
-git checkout 87-based
-git pull
-popd
+# if [[ $(arch) == "aarch64" || $(uname) == "Darwin" ]]; then
+# pushd src/3rdparty
+#
+# # Ensure that Chromium is built using the correct sysroot in Mac
+# awk 'NR==77{$0="    rebase_path(\"'$CONDA_BUILD_SYSROOT'\", root_build_dir),"}1' chromium/build/config/mac/BUILD.gn > chromium/build/config/mac/BUILD.gn.tmp
+# rm chromium/build/config/mac/BUILD.gn
+# mv chromium/build/config/mac/BUILD.gn.tmp chromium/build/config/mac/BUILD.gn
+# popd
+# fi
 
 mkdir qtwebengine-build
 pushd qtwebengine-build
@@ -61,8 +45,28 @@ if [[ $(uname) == "Linux" ]]; then
         PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
         ..
 
-    #cat config.log
-    #exit 1
+    # sed -i "/absl/base.internal.raw_logging.h/d" src/3rdparty/chromium/third_party/abseil-cpp/absl/debugging/internal/stacktrace_x86-inl.inc
+    # Cleanup before final version
+    # https://github.com/conda-forge/qt-webengine-feedstock/pull/15#issuecomment-1336593298
+    pushd "${PREFIX}/lib"
+    for f in *.prl; do
+        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f};
+    done
+    popd
+
+    pushd "${PREFIX}/mkspecs"
+    for f in *.pri; do
+        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
+    done
+    popd
+
+    pushd
+    cd "${PREFIX}/mkspecs/modules"
+    for f in *.pri; do
+        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
+    done
+    popd
+
     CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT
     make install
 fi
@@ -87,7 +91,7 @@ if [[ $(uname) == "Darwin" ]]; then
     if [[ $(arch) == "arm64" ]]; then
       EXTRA_FLAGS="QMAKE_APPLE_DEVICE_ARCHS=arm64"
     fi
-    
+
     if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
       # The python2_hack does not know about _sysconfigdata_arm64_apple_darwin20_0_0, so unset the data name
       unset _CONDA_PYTHON_SYSCONFIGDATA_NAME

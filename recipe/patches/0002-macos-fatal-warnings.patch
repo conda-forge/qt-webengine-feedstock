@@ -1,7 +1,7 @@
-diff --git a/chromium/build/config/compiler/BUILD.gn b/chromium/build/config/compiler/BUILD.gn
+diff --git a/src/3rdparty/chromium/build/config/compiler/BUILD.gn b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
 index 6a58d21cf07..4cabf5237a3 100644
---- a/chromium/build/config/compiler/BUILD.gn
-+++ b/chromium/build/config/compiler/BUILD.gn
+--- a/src/3rdparty/chromium/build/config/compiler/BUILD.gn
++++ b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
 @@ -64,7 +64,7 @@ declare_args() {
  
    # Enable fatal linker warnings. Building Chromium with certain versions

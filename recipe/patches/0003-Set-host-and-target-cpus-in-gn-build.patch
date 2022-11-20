@@ -7,10 +7,10 @@ Subject: [PATCH] Set host and target cpus in gn build
  chromium/build/config/BUILDCONFIG.gn | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/chromium/build/config/BUILDCONFIG.gn b/chromium/build/config/BUILDCONFIG.gn
+diff --git a/src/3rdparty/chromium/build/config/BUILDCONFIG.gn b/src/3rdparty/chromium/build/config/BUILDCONFIG.gn
 index 3815dd6f941..04c7af0afc9 100644
---- a/chromium/build/config/BUILDCONFIG.gn
-+++ b/chromium/build/config/BUILDCONFIG.gn
+--- a/src/3rdparty/chromium/build/config/BUILDCONFIG.gn
++++ b/src/3rdparty/chromium/build/config/BUILDCONFIG.gn
 @@ -50,6 +50,14 @@ if (target_os == "") {
    target_os = host_os
  }

@@ -7,10 +7,10 @@ Subject: [PATCH] Use CONDA_BUILD_SYSROOT
  gn/build/gen.py | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/gn/build/gen.py b/gn/build/gen.py
+diff --git a/src/3rdparty/gn/build/gen.py b/src/3rdparty/gn/build/gen.py
 index 8c646be8be3..2a37cb4e1ac 100755
---- a/gn/build/gen.py
-+++ b/gn/build/gen.py
+--- a/src/3rdparty/gn/build/gen.py
++++ b/src/3rdparty/gn/build/gen.py
 @@ -110,6 +110,7 @@ def main(argv):
                      help='The path to the macOS SDK sysroot to be used.')
    options, args = parser.parse_args(argv)
