@@ -118,7 +118,7 @@ requirements:
     - zlib
     - libxcb                             # [linux]
     # Matches the other migrations that we care for this feedstock
-    - qt-main    5.15.3
+    - qt-main    5.15.6
     - libwebp
     - openssl                            # [win]
   run:
