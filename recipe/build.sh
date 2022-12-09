@@ -45,7 +45,6 @@ if [[ $(uname) == "Linux" ]]; then
         PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
         ..
 
-    # sed -i "/absl/base.internal.raw_logging.h/d" src/3rdparty/chromium/third_party/abseil-cpp/absl/debugging/internal/stacktrace_x86-inl.inc
     # Cleanup before final version
     # https://github.com/conda-forge/qt-webengine-feedstock/pull/15#issuecomment-1336593298
     pushd "${PREFIX}/lib"
