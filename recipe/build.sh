@@ -1,14 +1,6 @@
-set -exou
+#! /usr/bin/env bash
 
-# if [[ $(arch) == "aarch64" || $(uname) == "Darwin" ]]; then
-# pushd src/3rdparty
-#
-# # Ensure that Chromium is built using the correct sysroot in Mac
-# awk 'NR==77{$0="    rebase_path(\"'$CONDA_BUILD_SYSROOT'\", root_build_dir),"}1' chromium/build/config/mac/BUILD.gn > chromium/build/config/mac/BUILD.gn.tmp
-# rm chromium/build/config/mac/BUILD.gn
-# mv chromium/build/config/mac/BUILD.gn.tmp chromium/build/config/mac/BUILD.gn
-# popd
-# fi
+set -xeuo pipefail
 
 mkdir qtwebengine-build
 pushd qtwebengine-build
@@ -72,17 +64,24 @@ fi
 
 if [[ $(uname) == "Darwin" ]]; then
     # Let Qt set its own flags and vars
-    for x in OSX_ARCH CFLAGS CXXFLAGS LDFLAGS
-    do
-        unset $x
-    done
+    unset OSX_ARCH CFLAGS CXXFLAGS LDFLAGS
 
     # Qt passes clang flags to LD (e.g. -stdlib=c++)
     export LD=${CXX}
-    export PATH=${PWD}:${PATH}
 
-    # Use xcode-avoidance scripts
+    # Use xcode-avoidance scripts provided by qt-main so that the build can
+    # run with just the command-line tools, and not full XCode, installed.
     export PATH=$PREFIX/bin/xc-avoidance:$PATH
+
+    # However, the Chromium build process uses absolute paths to the macOS
+    # build configuration tools (e.g., `/usr/bin/xcodebuild`), so the xcode-avoidance
+    # scripts don't work for that piece of the build. Instead we need
+    # to patch the build configuration to make sure that it builds against the
+    # desired SDK, so that the binary rpaths are correct.
+    pushd ../src/3rdparty/chromium/build/config/mac
+    awk 'NR==77{$0="    rebase_path(\"'$CONDA_BUILD_SYSROOT'\", root_build_dir),"}1' BUILD.gn >BUILD.gn.tmp
+    mv -f BUILD.gn.tmp BUILD.gn
+    popd
 
     export APPLICATION_EXTENSION_API_ONLY=NO
 
