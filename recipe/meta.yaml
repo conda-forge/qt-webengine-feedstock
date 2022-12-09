@@ -28,6 +28,8 @@ source:
       # https://github.com/qt/qtwebengine-chromium/commit/b2de8e8046dc1c558465f74b4afe11d57cbc6cf3
       - patches/0011-revert_fp16_cast_syntax_change.patch
       - patches/clang14-fixes.patch
+      # https://github.com/Homebrew/homebrew-core/pull/114739/files
+      - patches/qt5-webengine-xcode14.diff
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
