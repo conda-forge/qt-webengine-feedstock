@@ -1,5 +1,5 @@
 {% set name = "qt-webengine" %}
-{% set version = "5.15.4" %}
+{% set version = "5.15.7" %}
 {% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 8a2a903bcf2c45d8981f90fdfe96a9413d6fcfa0510e45c407a41a9b6bda0fca
+    sha256: 2b8f7248a7b8baed346f2ef942f24ef89038bb8b6d4c5af2409c730ed3d6cebd
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
@@ -36,16 +36,16 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 3
+  number: 0
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
-  missing_dso_whitelist:  # [osx]
+  missing_dso_whitelist:   # [osx]
     - /usr/lib/libbsm.0.dylib  # [osx]
     - /usr/lib/libcups.2.dylib  # [osx]
     - /usr/lib/libresolv.9.dylib  # [osx]
     - /usr/lib/libsandbox.1.dylib  # [osx]
-    - '/System/Library/Frameworks/CoreLocation.framework/**'  # [osx]
+    - /System/Library/Frameworks/CoreLocation.framework/**    # [osx]
 
 requirements:
   build:
@@ -186,7 +186,7 @@ about:
   home: http://qt.io
   license: LGPL-3.0-only
   license_file: LICENSE.LGPLv3
-  summary: 'Qt is a cross-platform application and UI framework.'
+  summary: Qt is a cross-platform application and UI framework.
   description: |
     Qt helps you create connected devices, UIs & applications that run
     anywhere on any device, on any operating system at any time.
