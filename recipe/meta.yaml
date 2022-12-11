@@ -131,7 +131,6 @@ requirements:
     - libxcb                             # [linux]
     - qt-main
     - libwebp
-    - openssl                            # [win]
   run:
     - libwebp
   run_constrained:
