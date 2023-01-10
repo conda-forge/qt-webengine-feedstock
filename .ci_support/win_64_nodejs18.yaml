@@ -15,7 +15,7 @@ libwebp:
 libxml2:
 - '2.10'
 nodejs:
-- '17'
+- '18'
 perl:
 - 5.32.1
 re2:
