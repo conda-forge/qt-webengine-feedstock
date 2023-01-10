@@ -19,6 +19,8 @@ build:
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt6-webengine', max_pin='x.x') }}
+  ignore_run_exports_from:
+    - python
 
 requirements:
   build:
@@ -31,6 +33,7 @@ requirements:
     - winflexbison  # [win]
     - nodejs
     - html5lib
+    - python 3.9
     - {{ compiler('cxx') }}
     - {{ compiler('c') }}
     - qt6-main  # [build_platform != target_platform]
@@ -81,6 +84,7 @@ requirements:
     - {{ cdt('xcb-util-renderutil-devel') }}  # [linux]
     - {{ cdt('xcb-util-wm-devel') }}          # [linux]
   host:
+    - python 3.9
     - qt6-main
     - nss  # [unix]
     - nspr  # [unix]
