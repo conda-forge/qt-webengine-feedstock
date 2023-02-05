@@ -36,7 +36,7 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -59,7 +59,6 @@ requirements:
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxext') }}               # [linux]
     - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
@@ -86,7 +85,6 @@ requirements:
     - {{ cdt('libxfixes-devel') }}       # [linux]
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('libxcb') }}                # [linux]
     - {{ cdt('expat-devel') }}           # [linux]
     - {{ cdt('pcre') }}                  # [linux]
@@ -131,6 +129,7 @@ requirements:
     - libxcb                             # [linux]
     - qt-main
     - libwebp
+    - libcups                            # [linux]
   run:
     - libwebp
   run_constrained:
