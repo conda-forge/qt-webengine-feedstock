@@ -7,9 +7,9 @@ channel_targets:
 cxx_compiler:
 - vs2019
 gst_plugins_base:
-- '1.21'
+- '1.22'
 gstreamer:
-- '1.21'
+- '1.22'
 libiconv:
 - '1'
 libpng:

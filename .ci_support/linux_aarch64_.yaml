@@ -27,9 +27,9 @@ fontconfig:
 freetype:
 - '2'
 gst_plugins_base:
-- '1.21'
+- '1.22'
 gstreamer:
-- '1.21'
+- '1.22'
 libevent:
 - 2.1.10
 libiconv:
