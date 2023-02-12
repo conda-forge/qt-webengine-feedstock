@@ -59,7 +59,6 @@ requirements:
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxext') }}               # [linux]
     - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
@@ -86,7 +85,6 @@ requirements:
     - {{ cdt('libxfixes-devel') }}       # [linux]
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('libxcb') }}                # [linux]
     - {{ cdt('expat-devel') }}           # [linux]
     - {{ cdt('pcre') }}                  # [linux]
@@ -131,6 +129,7 @@ requirements:
     - libxcb                             # [linux]
     - qt-main
     - libwebp
+    - libcups                            # [linux]
   run:
     - libwebp
   run_constrained:
