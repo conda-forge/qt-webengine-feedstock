@@ -118,6 +118,7 @@ requirements:
     - libglib                            # [linux]
     - libxml2                            # [linux]
     - libxkbcommon                       # [linux]
+    - libxkbfile                         # [linux]
     - expat                              # [linux]
     - libevent                           # [linux]
     - libpng
@@ -137,7 +138,7 @@ requirements:
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
     # users. However it seems that qt webengine 5.15.4 sources were
     # released
-    - qt 5.15.3|5.15.4|5.15.6
+    - qt 5.15.3|5.15.4|5.15.6|5.15.8
     # - qt {{ version }}
 
 test:
