@@ -1,5 +1,5 @@
 {% set name = "qt-webengine" %}
-{% set version = "5.15.4" %}
+{% set version = "5.15.8" %}
 {% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 8a2a903bcf2c45d8981f90fdfe96a9413d6fcfa0510e45c407a41a9b6bda0fca
+    sha256: 4f56dcab592a8e44c93951fb9d4840b5f73fd80ec2776979d38e42abca2b61e3
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
@@ -36,7 +36,7 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 3
+  number: 0
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -59,7 +59,6 @@ requirements:
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxext') }}               # [linux]
     - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
     - {{ cdt('libx11-devel') }}          # [linux]
     - {{ cdt('libxext-devel') }}         # [linux]
@@ -86,7 +85,6 @@ requirements:
     - {{ cdt('libxfixes-devel') }}       # [linux]
     - {{ cdt('libxxf86vm') }}            # [linux]
     - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('cups-devel') }}            # [linux]
     - {{ cdt('libxcb') }}                # [linux]
     - {{ cdt('expat-devel') }}           # [linux]
     - {{ cdt('pcre') }}                  # [linux]
@@ -120,6 +118,7 @@ requirements:
     - libglib                            # [linux]
     - libxml2                            # [linux]
     - libxkbcommon                       # [linux]
+    - libxkbfile                         # [linux]
     - expat                              # [linux]
     - libevent                           # [linux]
     - libpng
@@ -131,6 +130,7 @@ requirements:
     - libxcb                             # [linux]
     - qt-main
     - libwebp
+    - libcups                            # [linux]
   run:
     - libwebp
   run_constrained:
@@ -138,7 +138,7 @@ requirements:
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
     # users. However it seems that qt webengine 5.15.4 sources were
     # released
-    - qt 5.15.3|5.15.4|5.15.6
+    - qt 5.15.3|5.15.4|5.15.6|5.15.8
     # - qt {{ version }}
 
 test:

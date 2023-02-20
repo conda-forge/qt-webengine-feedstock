@@ -15,9 +15,9 @@ cxx_compiler:
 cxx_compiler_version:
 - '14'
 gst_plugins_base:
-- '1.21'
+- '1.22'
 gstreamer:
-- '1.21'
+- '1.22'
 libiconv:
 - '1'
 libpng:
