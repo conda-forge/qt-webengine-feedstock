@@ -20,6 +20,8 @@ gstreamer:
 - '1.22'
 libiconv:
 - '1'
+libjpeg_turbo:
+- '2'
 libpng:
 - '1.6'
 libsqlite:

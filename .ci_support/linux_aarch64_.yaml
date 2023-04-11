@@ -1,5 +1,7 @@
 BUILD:
 - aarch64-conda_cos7-linux-gnu
+alsa_lib:
+- 1.2.8
 c_compiler:
 - gcc
 c_compiler_version:
@@ -30,10 +32,14 @@ gst_plugins_base:
 - '1.22'
 gstreamer:
 - '1.22'
+harfbuzz:
+- '6'
 libevent:
 - 2.1.10
 libiconv:
 - '1'
+libjpeg_turbo:
+- '2'
 libpng:
 - '1.6'
 libsqlite:
