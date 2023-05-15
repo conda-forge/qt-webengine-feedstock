@@ -29,7 +29,7 @@ gst_plugins_base:
 gstreamer:
 - '1.22'
 harfbuzz:
-- '6'
+- '7'
 libevent:
 - 2.1.12
 libiconv:
