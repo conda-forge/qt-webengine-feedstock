@@ -3,7 +3,7 @@ alsa_lib:
 c_compiler:
 - gcc
 c_compiler_version:
-- '12'
+- '11'
 cdt_name:
 - cos7
 channel_sources:
@@ -13,7 +13,7 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '12'
+- '11'
 dbus:
 - '1'
 docker_image:
@@ -35,7 +35,7 @@ libevent:
 libiconv:
 - '1'
 libjpeg_turbo:
-- '2'
+- 2.1.5
 libpng:
 - '1.6'
 libsqlite:
