@@ -1,3 +1,5 @@
+alsa_lib:
+- 1.2.8
 c_compiler:
 - gcc
 c_compiler_version:
@@ -26,10 +28,14 @@ gst_plugins_base:
 - '1.22'
 gstreamer:
 - '1.22'
+harfbuzz:
+- '7'
 libevent:
-- 2.1.10
+- 2.1.12
 libiconv:
 - '1'
+libjpeg_turbo:
+- 2.1.5
 libpng:
 - '1.6'
 libsqlite:

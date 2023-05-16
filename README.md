@@ -1,11 +1,11 @@
-About qt-webengine
-==================
+About qt-webengine-feedstock
+============================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/qt-webengine-feedstock/blob/main/LICENSE.txt)
 
 Home: http://qt.io
 
 Package license: LGPL-3.0-only
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/qt-webengine-feedstock/blob/main/LICENSE.txt)
 
 Summary: Qt is a cross-platform application and UI framework.
 

@@ -36,7 +36,7 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -53,41 +53,11 @@ requirements:
     - {{ compiler('cxx') }}
     - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libselinux') }}            # [linux]
-    - {{ cdt('libxdamage') }}            # [linux]
-    - {{ cdt('libxxf86vm') }}            # [linux]
-    - {{ cdt('libxext') }}               # [linux]
-    - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('gtk2-devel') }}            # [linux]
-    - {{ cdt('gtkmm24-devel') }}         # [linux]
     - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libxcomposite-devel') }}   # [linux]
-    - {{ cdt('libxcursor-devel') }}      # [linux]
-    - {{ cdt('libxi-devel') }}           # [linux]
-    - {{ cdt('libxrandr-devel') }}       # [linux]
-    - {{ cdt('pciutils-devel') }}        # [linux]
-    - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-    - {{ cdt('libxtst-devel') }}         # [linux]
-    - {{ cdt('libselinux-devel') }}      # [linux]
-    - {{ cdt('libxdamage') }}            # [linux]
-    - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('libxfixes') }}             # [linux]
-    - {{ cdt('libxfixes-devel') }}       # [linux]
-    - {{ cdt('libxxf86vm') }}            # [linux]
-    - {{ cdt('libxxf86vm-devel') }}      # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
-    - {{ cdt('expat-devel') }}           # [linux]
-    - {{ cdt('pcre') }}                  # [linux]
+    - {{ cdt('libglvnd-glx') }}          # [linux]
+    - {{ cdt('libglvnd-egl') }}          # [linux]
     - pkg-config                         # [unix]
     - make                               # [unix]
     - cmake
@@ -100,13 +70,7 @@ requirements:
     - jom                                # [win]
     - nodejs >=16
   host:
-    # Chromium expects libjpeg-turbo as their main libjpeg reference and therefore
-    # it will use an statically-linked version to it whilst
-    # https://github.com/conda-forge/conda-forge.github.io/issues/673 is fixed.
-    # Most internal dependencies such as SKIA use turbo-jpeg specific functions
-    # and constants, and therefore trying to patch them would cause unexpected
-    # errors or would be impossible.
-    # - jpeg
+    - libjpeg-turbo
     - pulseaudio                         # [linux]
     - gstreamer
     - pthread-stubs                      # [linux]
@@ -131,8 +95,32 @@ requirements:
     - qt-main
     - libwebp
     - libcups                            # [linux]
+    # Found as part of 2023/04 exploration on overlinked dependencies
+    - libopus                            # [linux]
+    - harfbuzz                           # [linux]
+    - alsa-lib                           # [linux]
+    - xorg-libx11                        # [linux]
+    - xorg-libxext                       # [linux]
+    - xorg-libxrender                    # [linux]
+    - xorg-libxi                         # [linux]
+    - xorg-libxcursor                    # [linux]
+    - xorg-libxcomposite                 # [linux]
+    - xorg-libxrandr                     # [linux]
+    - xorg-libxtst                       # [linux]
+    - xorg-xproto                        # [linux]
+    - xorg-glproto                       # [linux]
+    - xorg-libxdamage                    # [linux]
+    - xorg-inputproto                    # [linux]
+    - xorg-libxfixes                     # [linux]
   run:
     - libwebp
+    # These do not have run_exports
+    - xorg-libxcomposite                 # [linux]
+    - xorg-libxdamage                    # [linux]
+    - xorg-libxrender                    # [linux]
+    - xorg-libxrandr                     # [linux]
+    - xorg-libxtst                       # [linux]
+    - xorg-libxfixes                     # [linux]
   run_constrained:
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
@@ -144,35 +132,13 @@ requirements:
 test:
   requires:
     - {{ compiler('cxx') }}
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
+    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('alsa-lib-devel') }}        # [linux]
-    - {{ cdt('gtk2-devel') }}            # [linux]
-    - {{ cdt('gtkmm24-devel') }}         # [linux]
     - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libxcomposite-devel') }}   # [linux]
-    - {{ cdt('libxcursor-devel') }}      # [linux]
-    - {{ cdt('libxrandr-devel') }}       # [linux]
-    - {{ cdt('libxi-devel') }}           # [linux]
-    - {{ cdt('pciutils-devel') }}        # [linux]
-    - {{ cdt('libxscrnsaver-devel') }}   # [linux]
-    - {{ cdt('libxtst-devel') }}         # [linux]
-    - {{ cdt('libselinux-devel') }}      # [linux]
-    - {{ cdt('libxdamage') }}            # [linux]
-    - {{ cdt('libxdamage-devel') }}      # [linux]
-    - {{ cdt('libxfixes') }}             # [linux]
-    - {{ cdt('libxfixes-devel') }}       # [linux]
-    - {{ cdt('libxxf86vm') }}            # [linux]
-    - {{ cdt('libxcb') }}                # [linux]
-    - {{ cdt('expat-devel') }}           # [linux]
-    - {{ cdt('pcre') }}                  # [linux]
     - {{ cdt('libglvnd-glx') }}          # [linux]
+    - {{ cdt('libglvnd-egl') }}          # [linux]
     - make                               # [unix]
   files:
     - test/main-qtwebengine.cpp
