@@ -4,7 +4,7 @@ set -ex
 docker system prune --force
 
 export CPU_COUNT=${CPU_COUNT:-10}
-configs="linux_aarch64_ linux_ppc64le_ linux_64_"
+configs="linux_aarch64_ linux_64_"
 
 for config_filename in $configs; do
     filename=$(basename ${config_filename})

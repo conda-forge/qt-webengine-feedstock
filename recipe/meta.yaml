@@ -92,7 +92,7 @@ requirements:
     - libsqlite
     - zlib
     - libxcb                             # [linux]
-    - qt-main
+    - qt-main  {{ version }}
     - libwebp
     - libcups                            # [linux]
     # Found as part of 2023/04 exploration on overlinked dependencies
