@@ -47,13 +47,15 @@ libsqlite:
 libwebp:
 - '1'
 libxml2:
-- '2.10'
+- '2.11'
 nspr:
 - '4'
 nss:
 - '3'
 pulseaudio:
 - '16.1'
+qt_main:
+- '5.15'
 target_platform:
 - linux-aarch64
 zip_keys:
