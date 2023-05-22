@@ -71,7 +71,7 @@ requirements:
     - nodejs >=16
   host:
     - libjpeg-turbo
-    - pulseaudio                         # [linux]
+    - pulseaudio-client                  # [linux]
     - gstreamer
     - pthread-stubs                      # [linux]
     - dbus                               # [linux]
