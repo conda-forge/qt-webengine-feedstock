@@ -54,8 +54,6 @@ nspr:
 - '4'
 nss:
 - '3'
-qt_main:
-- '5.15'
 target_platform:
 - linux-aarch64
 zip_keys:
