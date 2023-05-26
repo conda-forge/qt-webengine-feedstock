@@ -58,7 +58,10 @@ if [[ $(uname) == "Linux" ]]; then
     done
     popd
 
-    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT
+    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT \
+        | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
+        | sed "s,^g++.*-o,g++ [...] -o,"
+    #           ^    use a comma instead of a / to avoid escape sequences
     make install
 fi
 
