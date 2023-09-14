@@ -50,6 +50,8 @@ nspr:
 - '4'
 nss:
 - '3'
+pulseaudio_client:
+- '16.1'
 target_platform:
 - linux-64
 zip_keys:
