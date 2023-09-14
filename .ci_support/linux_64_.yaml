@@ -1,5 +1,5 @@
 alsa_lib:
-- 1.2.9
+- 1.2.10
 c_compiler:
 - gcc
 c_compiler_version:
@@ -29,7 +29,7 @@ gst_plugins_base:
 gstreamer:
 - '1.22'
 harfbuzz:
-- '7'
+- '8'
 libevent:
 - 2.1.12
 libiconv:
