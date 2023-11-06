@@ -2,7 +2,11 @@ MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
   - '10.13'                # [osx and x86_64]
 MACOSX_SDK_VERSION:        # [osx and x86_64]
   - '10.14'                # [osx and x86_64]
-c_compiler_version:        # [linux]
+c_compiler_version:        # [unix]
+  # downgraded in #27 for reasons that aren't apparent
   - 11                     # [linux]
-cxx_compiler_version:      # [linux]
+  # clang 16 errors on incompatible function pointers
+  - 15                     # [osx]
+cxx_compiler_version:      # [unix]
   - 11                     # [linux]
+  - 15                     # [osx]
