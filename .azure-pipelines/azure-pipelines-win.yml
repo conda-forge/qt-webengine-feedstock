@@ -11,7 +11,7 @@ jobs:
       win_64_:
         CONFIG: win_64_
         UPLOAD_PACKAGES: 'True'
-  timeoutInMinutes: 360
+  timeoutInMinutes: 1
   variables:
     CONDA_BLD_PATH: C:\bld\
     UPLOAD_TEMP: D:\\tmp
