@@ -1,5 +1,10 @@
 azure:
+  settings_linux:
+    timeoutInMinutes: 1
+  settings_osx:
+    timeoutInMinutes: 1
   settings_win:
+    timeoutInMinutes: 1
     variables:
       CONDA_BLD_PATH: C:\bld\
 build_platform:
