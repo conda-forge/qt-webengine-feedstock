@@ -1,0 +1,22 @@
+diff --git a/src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp b/src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
+index 7260365..98a1de5 100644
+--- a/src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
++++ b/src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
+@@ -297,14 +297,14 @@ static constexpr struct ColorRec {
+ };
+ 
+ const char* SkParse::FindNamedColor(const char* name, size_t len, SkColor* color) {
+-    const auto rec = std::lower_bound(std::begin(gColorNames),
+-                                      std::end  (gColorNames),
++    const auto rec = std::lower_bound((gColorNames),
++                                      (gColorNames + sizeof(gColorNames) / sizeof(gColorNames[0])),
+                                       name, // key
+                                       [](const char* name, const char* key) {
+                                           return strcmp(name, key) < 0;
+                                       });
+ 
+-    if (rec == std::end(gColorNames) || 0 != strcmp(name, *rec)) {
++    if (rec == (gColorNames + sizeof(gColorNames) / sizeof(gColorNames[0])) || 0 != strcmp(name, *rec)) {
+         return nullptr;
+     }
+ 

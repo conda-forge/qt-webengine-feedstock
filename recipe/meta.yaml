@@ -31,6 +31,24 @@ source:
       # https://github.com/Homebrew/homebrew-core/pull/114739/files
       - patches/qt5-webengine-xcode14.diff
 
+      # hmaarrfk - 2023/12
+      #   I generated this patch when I updated the compilers on linux from 11 to 12
+      #   during the libxml2212 migration
+      #   https://github.com/conda-forge/qt-webengine-feedstock/pull/43/files
+      #
+      # Due to the limited access I have to osx and windows, I decided to only
+      # apply this patch to linux.
+      #
+      # In searching the source for std::begin, it seemed like there were 100s
+      # of occurances of its usage. I thus designed a command to help in its
+      # replacement.
+      # However, after applying the patch to the first error, it seemed like it worked.
+      #
+      # This patch was generated with
+      # sed -i'' 's/std::begin[[:space:]]*(\([^)]*\))/(\1)/g' src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
+      # sed -i'' 's/std::end[[:space:]]*(\([^)]*\))/(\1 + sizeof(\1) \/ sizeof(\1[0]))/g' src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
+      - patches/cxx17_support_std_begin_std_end.patch  # [linux]
+
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
