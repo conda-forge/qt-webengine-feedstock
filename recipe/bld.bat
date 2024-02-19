@@ -18,6 +18,10 @@ cmake -LAH -G "Ninja" ^
     -DBISON_EXECUTABLE=%BUILD_PREFIX%\Library\bin\win_bison.exe ^
     -DFLEX_EXECUTABLE=%BUILD_PREFIX%\Library\bin\win_flex.exe ^
     -DFEATURE_webengine_build_gn=OFF ^
+    -DFEATURE_webengine_system_libevent=ON ^
+    -DFEATURE_webengine_system_icu=ON ^
+    -DFEATURE_qtpdf_build=OFF ^
+    -DFEATURE_webengine_jumbo_file_merge_limit=16 ^
     ..
 if errorlevel 1 exit 1
 
