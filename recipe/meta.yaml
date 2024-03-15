@@ -15,21 +15,7 @@ source:
       - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
       - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
-      # https://bugreports.qt.io/browse/QTBUG-101995?focusedCommentId=653798
-      # https://codereview.qt-project.org/c/qt/qtwebengine-chromium/+/402639
-      - patches/fix_unused_var_in_harfbuzz_ng.patch
-      # This patch may be required for other OSes too
-      # similar to the discussion in
-      # https://github.com/abseil/abseil-cpp/issues/1275
-      - patches/limits_h_header.patch
-      # Only used in aarch64 / osx-arm
-      # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=236855#c8
-      #    reverts
-      # https://github.com/qt/qtwebengine-chromium/commit/b2de8e8046dc1c558465f74b4afe11d57cbc6cf3
-      - patches/0011-revert_fp16_cast_syntax_change.patch
-      - patches/clang14-fixes.patch
-      # https://github.com/Homebrew/homebrew-core/pull/114739/files
-      - patches/qt5-webengine-xcode14.diff
+      #- patches/clang14-fixes.patch
 
       # hmaarrfk - 2023/12
       #   I generated this patch when I updated the compilers on linux from 11 to 12
