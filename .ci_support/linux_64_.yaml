@@ -1,5 +1,5 @@
 alsa_lib:
-- 1.2.10
+- '1.2'
 c_compiler:
 - gcc
 c_compiler_version:
@@ -7,7 +7,7 @@ c_compiler_version:
 cdt_name:
 - cos7
 channel_sources:
-- conda-forge
+- adrianinsaval,conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
@@ -45,7 +45,7 @@ libwebp:
 libxcb:
 - '1.15'
 libxml2:
-- '2.12'
+- '2'
 nspr:
 - '4'
 nss:
