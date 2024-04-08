@@ -72,8 +72,8 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
+    - {{ compiler('cxx') }}
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -144,7 +144,6 @@ requirements:
     - xorg-libxtst                       # [linux]
     - xorg-libxfixes                     # [linux]
   run_constrained:
-    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
     # users. However it seems that qt webengine 5.15.4 sources were
     # released
