@@ -49,6 +49,10 @@ source:
       # sed -i'' 's/std::end[[:space:]]*(\([^)]*\))/(\1 + sizeof(\1) \/ sizeof(\1[0]))/g' src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
       - patches/cxx17_support_std_begin_std_end.patch  # [linux]
 
+      # https://github.com/ninja-build/ninja/issues/2417#issuecomment-2059047539
+      # https://bugs.gentoo.org/930107
+      - patches/add_missing_dependency_on_spellcheck.diff
+
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]

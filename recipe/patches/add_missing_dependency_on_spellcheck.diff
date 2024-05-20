@@ -1,0 +1,12 @@
+diff --git a/src/3rdparty/chromium/content/browser/BUILD.gn b/src/3rdparty/chromium/content/browser/BUILD.gn
+index 1466f33d4..cb3b5d76c 100644
+--- a/src/3rdparty/chromium/content/browser/BUILD.gn
++++ b/src/3rdparty/chromium/content/browser/BUILD.gn
+@@ -36,6 +36,7 @@ jumbo_static_library("devtools_protocol") {
+ 
+   deps = [
+     "//base",
++    "//components/spellcheck:buildflags",
+     "//content/browser/devtools:devtools_background_services_proto",
+     "//content/browser/devtools:protocol_sources",
+     "//content/common:buildflags",
