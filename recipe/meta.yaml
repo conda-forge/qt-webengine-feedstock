@@ -76,13 +76,14 @@ test:
   source_files:
     - examples/
   commands:
-    {% set qt_libs = ["WebEngine"] %}
-    {% for each_qt_lib in qt_libs %}
-    - test -d $PREFIX/include/qt6/Qt{{ each_qt_lib }}  # [unix]
-    - test -f $PREFIX/lib/libQt6{{ each_qt_lib }}${SHLIB_EXT}  # [unix]
-    - if not exist %PREFIX%\\Library\\include\\qt6\\Qt{{ each_qt_lib }} exit 1  # [win]
-    - if not exist %PREFIX%\\Library\\lib\\Qt6{{ each_qt_lib }}.lib exit 1  # [win]
-    - if not exist %PREFIX%\\Library\\bin\\Qt6{{ each_qt_lib }}.dll exit 1  # [win]
+    {% for each_qt_lib in ["WebEngine"] %}
+    # headers
+    - test -d $PREFIX/include/qt6/Qt{{ each_qt_lib }}               # [unix]
+    - if not exist %LIBRARY_INC%\qt6\Qt{{ each_qt_lib }} exit 1     # [win]
+    # shared libraries
+    - test -f $PREFIX/lib/libQt6{{ each_qt_lib }}${SHLIB_EXT}       # [unix]
+    - if not exist %LIBRARY_LIB%\Qt6{{ each_qt_lib }}.lib exit 1    # [win]
+    - if not exist %LIBRARY_BIN%\Qt6{{ each_qt_lib }}.dll exit 1    # [win]
     {% endfor %}
 
 about:
