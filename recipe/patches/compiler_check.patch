@@ -1,0 +1,13 @@
+diff --git a/configure.cmake b/configure.cmake
+index a9f659533..191a1a049 100644
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -579,7 +579,7 @@ add_check_for_support(
+    CONDITION MSVC OR
+        (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+        (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+-       (MACOS AND CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
++       (MACOS AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    MESSAGE
+        "${CMAKE_CXX_COMPILER_ID} compiler is not supported."
+ )
