@@ -37,9 +37,9 @@ requirements:
     - python
     - {{ compiler('cxx') }}
     - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - qt6-main {{ version }}  # [build_platform != target_platform]
     - gn  # [build_platform != target_platform]
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -64,7 +64,7 @@ requirements:
 
 test:
   requires:
-    - sysroot_linux-64 2.17              # [linux]
+    - sysroot_linux-64 {{ c_stdlib_version }}   # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
