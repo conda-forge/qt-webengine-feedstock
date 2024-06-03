@@ -75,6 +75,9 @@ test:
     - ninja
   source_files:
     - examples/
+  files:
+    - test_package.sh
+    - test_package.bat
   commands:
     {% for each_qt_lib in ["WebEngine"] %}
     # headers
@@ -85,6 +88,10 @@ test:
     - if not exist %LIBRARY_LIB%\Qt6{{ each_qt_lib }}.lib exit 1    # [win]
     - if not exist %LIBRARY_BIN%\Qt6{{ each_qt_lib }}.dll exit 1    # [win]
     {% endfor %}
+
+    # basic build test for qtwebengine.pro
+    - ./test_package.sh     # [unix]
+    - ./test_package.bat    # [win]
 
 about:
   home: http://qt-project.org
