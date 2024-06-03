@@ -6,6 +6,10 @@ c_compiler:
 - clang
 c_compiler_version:
 - '16'
+c_stdlib:
+- macosx_deployment_target
+c_stdlib_version:
+- '11.0'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -16,6 +20,8 @@ cxx_compiler_version:
 - '16'
 ffmpeg:
 - '6'
+lcms2:
+- '2'
 libevent:
 - 2.1.12
 libwebp:
@@ -33,9 +39,9 @@ nss:
 perl:
 - 5.32.1
 re2:
-- 2023.06.02
+- 2023.09.01
 snappy:
-- '1'
+- '1.2'
 target_platform:
 - osx-arm64
 zip_keys:
