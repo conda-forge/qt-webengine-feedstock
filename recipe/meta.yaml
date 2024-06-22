@@ -94,13 +94,10 @@ requirements:
   host:
     - libjpeg-turbo
     - pulseaudio-client                  # [linux]
-    - gstreamer
     - pthread-stubs                      # [linux]
     - dbus                               # [linux]
     - fontconfig                         # [linux]
     - freetype                           # [linux]
-    - gst-plugins-base
-    - gstreamer
     - libglib                            # [linux]
     - libxml2                            # [linux]
     - libxkbcommon                       # [linux]
