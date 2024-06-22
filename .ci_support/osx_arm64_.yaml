@@ -18,10 +18,6 @@ cxx_compiler:
 - clangxx
 cxx_compiler_version:
 - '15'
-gst_plugins_base:
-- '1.22'
-gstreamer:
-- '1.22'
 libiconv:
 - '1'
 libjpeg_turbo:

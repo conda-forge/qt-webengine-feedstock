@@ -28,10 +28,6 @@ fontconfig:
 - '2'
 freetype:
 - '2'
-gst_plugins_base:
-- '1.22'
-gstreamer:
-- '1.22'
 harfbuzz:
 - '8'
 libevent:
