@@ -69,7 +69,7 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - sysroot_linux-64 2.17              # [linux]
+    - {{ stdlib('c') }}
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -150,7 +150,7 @@ requirements:
 test:
   requires:
     - {{ compiler('cxx') }}
-    - sysroot_linux-64 2.17              # [linux]
+    - {{ stdlib('c') }}
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
