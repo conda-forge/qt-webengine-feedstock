@@ -49,12 +49,16 @@ source:
       # sed -i'' 's/std::end[[:space:]]*(\([^)]*\))/(\1 + sizeof(\1) \/ sizeof(\1[0]))/g' src/3rdparty/chromium/third_party/skia/src/utils/SkParseColor.cpp
       - patches/cxx17_support_std_begin_std_end.patch  # [linux]
 
+      # https://github.com/ninja-build/ninja/issues/2417#issuecomment-2059047539
+      # https://bugs.gentoo.org/930107
+      - patches/add_missing_dependency_on_spellcheck.diff
+
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 6
+  number: 7
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -68,8 +72,8 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
-    - sysroot_linux-64 2.17              # [linux]
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]
@@ -90,13 +94,10 @@ requirements:
   host:
     - libjpeg-turbo
     - pulseaudio-client                  # [linux]
-    - gstreamer
     - pthread-stubs                      # [linux]
     - dbus                               # [linux]
     - fontconfig                         # [linux]
     - freetype                           # [linux]
-    - gst-plugins-base
-    - gstreamer
     - libglib                            # [linux]
     - libxml2                            # [linux]
     - libxkbcommon                       # [linux]
@@ -140,7 +141,6 @@ requirements:
     - xorg-libxtst                       # [linux]
     - xorg-libxfixes                     # [linux]
   run_constrained:
-    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.14") }}  # [osx and x86_64]
     # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
     # users. However it seems that qt webengine 5.15.4 sources were
     # released
@@ -150,7 +150,7 @@ requirements:
 test:
   requires:
     - {{ compiler('cxx') }}
-    - sysroot_linux-64 2.17              # [linux]
+    - {{ stdlib('c') }}
     - {{ cdt('mesa-libgl-devel') }}      # [linux]
     - {{ cdt('mesa-libegl-devel') }}     # [linux]
     - {{ cdt('mesa-dri-drivers') }}      # [linux]

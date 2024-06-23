@@ -4,6 +4,10 @@ c_compiler:
 - gcc
 c_compiler_version:
 - '12'
+c_stdlib:
+- sysroot
+c_stdlib_version:
+- '2.17'
 cdt_name:
 - cos7
 channel_sources:
@@ -24,10 +28,6 @@ fontconfig:
 - '2'
 freetype:
 - '2'
-gst_plugins_base:
-- '1.22'
-gstreamer:
-- '1.22'
 harfbuzz:
 - '8'
 libevent:
@@ -43,7 +43,7 @@ libsqlite:
 libwebp:
 - '1'
 libxcb:
-- '1.15'
+- '1.16'
 libxml2:
 - '2'
 nspr:
@@ -51,11 +51,13 @@ nspr:
 nss:
 - '3'
 pulseaudio_client:
-- '17'
+- '17.0'
 target_platform:
 - linux-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
+- - c_stdlib_version
+  - cdt_name
 zlib:
-- '1.2'
+- '1'
