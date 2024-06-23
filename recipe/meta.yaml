@@ -1,5 +1,5 @@
 {% set name = "qt-webengine" %}
-{% set version = "5.15.8" %}
+{% set version = "5.15.14" %}
 {% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 4f56dcab592a8e44c93951fb9d4840b5f73fd80ec2776979d38e42abca2b61e3
+    sha256: 9b1f3f2bcbfe7f2e632b6957fb34c23ccdbf640ca27515b8687fc4a55beeed2d
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
@@ -58,11 +58,11 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 7
+  number: 0
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
-  missing_dso_whitelist:  # [osx]
+  missing_dso_whitelist:   # [osx]
     - /usr/lib/libbsm.0.dylib  # [osx]
     - /usr/lib/libcups.2.dylib  # [osx]
     - /usr/lib/libresolv.9.dylib  # [osx]
