@@ -33,7 +33,7 @@ fontconfig:
 freetype:
 - '2'
 harfbuzz:
-- '8'
+- '9'
 libevent:
 - 2.1.12
 libiconv:
