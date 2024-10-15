@@ -18,6 +18,8 @@ libsqlite:
 - '3'
 libwebp:
 - '1'
+qt:
+- '5.15'
 target_platform:
 - win-64
 zlib:
