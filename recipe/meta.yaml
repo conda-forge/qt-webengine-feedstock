@@ -1,5 +1,5 @@
 {% set name = "qt-webengine" %}
-{% set version = "5.15.8" %}
+{% set version = "5.15.15" %}
 {% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
@@ -8,29 +8,13 @@ package:
 
 source:
   - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 4f56dcab592a8e44c93951fb9d4840b5f73fd80ec2776979d38e42abca2b61e3
+    sha256: 25da17b8f5087d57482ee727717784edd30942418c5b75fb539103089075e91f
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
       - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
       - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
-      # https://bugreports.qt.io/browse/QTBUG-101995?focusedCommentId=653798
-      # https://codereview.qt-project.org/c/qt/qtwebengine-chromium/+/402639
-      - patches/fix_unused_var_in_harfbuzz_ng.patch
-      # This patch may be required for other OSes too
-      # similar to the discussion in
-      # https://github.com/abseil/abseil-cpp/issues/1275
-      - patches/limits_h_header.patch
-      # Only used in aarch64 / osx-arm
-      # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=236855#c8
-      #    reverts
-      # https://github.com/qt/qtwebengine-chromium/commit/b2de8e8046dc1c558465f74b4afe11d57cbc6cf3
-      - patches/0011-revert_fp16_cast_syntax_change.patch
-      - patches/clang14-fixes.patch
-      # https://github.com/Homebrew/homebrew-core/pull/114739/files
-      - patches/qt5-webengine-xcode14.diff
-
       # hmaarrfk - 2023/12
       #   I generated this patch when I updated the compilers on linux from 11 to 12
       #   during the libxml2212 migration
@@ -52,13 +36,21 @@ source:
       # https://github.com/ninja-build/ninja/issues/2417#issuecomment-2059047539
       # https://bugs.gentoo.org/930107
       - patches/add_missing_dependency_on_spellcheck.diff
+      # https://github.com/google/perfetto/commit/b82a213bcf71dd8e68b53941375936c7905c0ff2
+      - patches/fix-perfetto-compilation.patch
+      - patches/ffmpeg-mathops.patch
+      - patches/python3.12-imp.patch
+      # macports patches https://github.com/macports/macports-ports/commit/a9ba31ffe6bdd86b9c13737aa583e7c003f1fb58#diff-bc9f30dc8c9f361f400189b91801321d634f45c504735b63dd156a06e245449fR1790
+      - patches/patch-qtwebengine_hb-ft.cc_error.diff
+      - patches/patch-qtwebengine-browser-build.gn.diff
+      - patches/patch-qtwebengine_v8_build.gn_error.diff
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 8
+  number: 1
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -141,10 +133,7 @@ requirements:
     - xorg-libxtst                       # [linux]
     - xorg-libxfixes                     # [linux]
   run_constrained:
-    # As of, 2022/04/25, Qt 5.15.4 was only ever released to commercial
-    # users. However it seems that qt webengine 5.15.4 sources were
-    # released
-    - qt 5.15.3|5.15.4|5.15.6|5.15.8
+    - qt 5.15.3|5.15.4|5.15.6|5.15.8|5.15.15
     # - qt {{ version }}
 
 test:
