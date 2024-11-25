@@ -1,5 +1,3 @@
-BUILD:
-- aarch64-conda_cos7-linux-gnu
 alsa_lib:
 - '1.2'
 c_compiler:
@@ -10,8 +8,6 @@ c_stdlib:
 - sysroot
 c_stdlib_version:
 - '2.17'
-cdt_arch:
-- aarch64
 cdt_name:
 - conda
 channel_sources:
@@ -59,7 +55,7 @@ pulseaudio_client:
 qt:
 - '5.15'
 target_platform:
-- linux-aarch64
+- linux-ppc64le
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
