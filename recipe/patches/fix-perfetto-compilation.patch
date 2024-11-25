@@ -1,0 +1,91 @@
+From b82a213bcf71dd8e68b53941375936c7905c0ff2 Mon Sep 17 00:00:00 2001
+From: Primiano Tucci <primiano@google.com>
+Date: Sat, 19 Dec 2020 18:08:06 +0100
+Subject: [PATCH] base::CircularQueue give up on const correctness for MSVC
+
+This CL makes the CircularQueue iterator not work on const
+queue instances (for which there is no current usage) in exchange
+of making it work on MSVC.
+The problem is that the current Iterator implementation is only
+half const-correct. A truly const-correct version would require
+two Iterator classes a const_iterator and an interator, and
+corresponding const+non-const begin()/end() and front()/back()
+methods on the CircularQueue container. That's too much complexity
+and more chances to get things wrong.
+
+Failure log: https://pastebin.com/raw/2v3q6pkf
+FAILED: obj/src/base/unittests.circular_queue_unittest.obj
+C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.28.29333\bin\Hostx64\x64\cl.exe /nologo /showIncludes /FC -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_DEPRECATE -DNOMINMAX -D_HAS_EXCEPTIONS=0 -DWIN32_LEAN_AND_MEAN -DGTEST_LANG_CXX11=1 -DPERFETTO_IMPLEMENTATION "-IC:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.28.29333/include" "-IC:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt" "-IC:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um" "-IC:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared" -I../../buildtools/googletest/googletest/include -I../../buildtools/googletest/googlemock/include -I../.. -I../../include -Igen/build_config -Igen -I../../src/third_party_getopt /Od /bigobj /Gy /WX /Z7 /W2 /wd4244 /wd4267 /GR- /c ../../src/base/circular_queue_unittest.cc /Foobj/src/base/unittests.circular_queue_unittest.obj /Fd"obj/src/base/unittests_c.pdb"
+C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.28.29333\include\algorithm(7419): error C3892: '_First': you cannot assign to a variable that is const
+C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.28.29333\include\algorithm(7541): note: see reference to function template instantiation '_BidIt std::_Insertion_sort_unchecked<_RanIt,_Pr>(const _BidIt,const _BidIt,_Pr)' being compiled
+        with
+        [
+            _BidIt=perfetto::base::CircularQueue<uint64_t>::Iterator,
+            _RanIt=perfetto::base::CircularQueue<uint64_t>::Iterator,
+            _Pr=std::less<void>
+        ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.28.29333\include\algorithm(7571): note: see reference to function template instantiation 'void std::_Sort_unchecked<_RanIt,_Fn>(_RanIt,_RanIt,__int64,_Pr)' being compiled
+        with
+        [
+            _RanIt=perfetto::base::CircularQueue<uint64_t>::Iterator,
+            _Fn=std::less<void>,
+            _Pr=std::less<void>
+        ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.28.29333\include\algorithm(7576): note: see reference to function template instantiation 'void std::sort<_RanIt,std::less<void>>(const _RanIt,const _RanIt,_Pr)' being compiled
+        with
+        [
+            _RanIt=perfetto::base::CircularQueue<uint64_t>::Iterator,
+            _Pr=std::less<void>
+        ]
+D:\Progetti\perfetto\src\base\circular_queue_unittest.cc(100): note: see reference to function template instantiation 'void std::sort<perfetto::base::CircularQueue<uint64_t>::Iterator>(const _RanIt,const _RanIt)' being compiled
+        with
+        [
+            _RanIt=perfetto::base::CircularQueue<uint64_t>::Iterator
+        ]
+ninja: build stopped: subcommand failed.
+PS D:\Progetti\perfetto>
+
+Bug: 174454879
+Change-Id: I1cfb44dac646f455157ce08b15e14b3349e5a7de
+---
+ include/perfetto/ext/base/circular_queue.h | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/include/perfetto/ext/base/circular_queue.h b/include/perfetto/ext/base/circular_queue.h
+index 18ca770261..8d1f1b7e38 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/include/perfetto/ext/base/circular_queue.h
++++ b/src/3rdparty/chromium/third_party/perfetto/include/perfetto/ext/base/circular_queue.h
+@@ -67,26 +67,22 @@ class CircularQueue {
+       ignore_result(generation);
+     }
+ 
+-    T* operator->() {
++    Iterator(const Iterator&) noexcept = default;
++    Iterator& operator=(const Iterator&) noexcept = default;
++    Iterator(Iterator&&) noexcept = default;
++    Iterator& operator=(Iterator&&) noexcept = default;
++
++    T* operator->() const {
+ #if PERFETTO_DCHECK_IS_ON()
+       PERFETTO_DCHECK(generation_ == queue_->generation());
+ #endif
+       return queue_->Get(pos_);
+     }
+ 
+-    const T* operator->() const {
+-      return const_cast<CircularQueue<T>::Iterator*>(this)->operator->();
+-    }
+-
+-    T& operator*() { return *(operator->()); }
+-    const T& operator*() const { return *(operator->()); }
++    T& operator*() const { return *(operator->()); }
+ 
+     value_type& operator[](difference_type i) { return *(*this + i); }
+ 
+-    const value_type& operator[](difference_type i) const {
+-      return const_cast<CircularQueue<T>::Iterator&>(*this)[i];
+-    }
+-
+     Iterator& operator++() {
+       Add(1);
+       return *this;
