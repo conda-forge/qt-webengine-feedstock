@@ -1,4 +1,5 @@
 azure:
+  settings_win:
     variables:
       CONDA_BLD_PATH: C:\bld\
       MINIFORGE_HOME: C:\Miniforge
