@@ -118,10 +118,8 @@ requirements:
     - xorg-libxcomposite                 # [linux]
     - xorg-libxrandr                     # [linux]
     - xorg-libxtst                       # [linux]
-    - xorg-xproto                        # [linux]
-    - xorg-glproto                       # [linux]
     - xorg-libxdamage                    # [linux]
-    - xorg-inputproto                    # [linux]
+    - xorg-xorgproto                     # [linux]
     - xorg-libxfixes                     # [linux]
   run:
     - libwebp
