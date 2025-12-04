@@ -95,7 +95,7 @@ requirements:
     - fontconfig                         # [linux]
     - freetype                           # [linux]
     - libglib                            # [linux]
-    - libxml2-devel                            # [linux]
+    - libxml2-devel                      # [linux]
     - libxkbcommon                       # [linux]
     - libxkbfile                         # [linux]
     - expat                              # [linux]
