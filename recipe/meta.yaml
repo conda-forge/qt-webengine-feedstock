@@ -70,12 +70,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
     - pkg-config                         # [unix]
     - make                               # [unix]
     - cmake
@@ -94,6 +88,7 @@ requirements:
     - dbus                               # [linux]
     - fontconfig                         # [linux]
     - freetype                           # [linux]
+    - libgl-devel                        # [linux]
     - libglib                            # [linux]
     - libxml2-devel                      # [linux]
     - libxkbcommon                       # [linux]
@@ -142,12 +137,6 @@ test:
   requires:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
     - make                               # [unix]
   files:
     - test/main-qtwebengine.cpp
