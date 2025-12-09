@@ -138,6 +138,7 @@ test:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
     - make                               # [unix]
+    - libgl-devel                        # [linux]
   files:
     - test/main-qtwebengine.cpp
     - test/qml.qrc
