@@ -207,4 +207,5 @@ Feedstock Maintainers
 * [@msarahan](https://github.com/msarahan/)
 * [@ocefpaf](https://github.com/ocefpaf/)
 * [@stuarteberg](https://github.com/stuarteberg/)
+* [@zklaus](https://github.com/zklaus/)
 
