@@ -48,6 +48,7 @@ source:
       - patches/patch-qtwebengine_hb-ft.cc_error.diff
       - patches/patch-qtwebengine-browser-build.gn.diff
       - patches/patch-qtwebengine_v8_build.gn_error.diff
+      - patches/const-fix.patch
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
@@ -91,6 +92,7 @@ requirements:
     - libgl-devel                        # [linux]
     - libglib                            # [linux]
     - libxml2-devel                      # [linux]
+    - libxslt                            # [linux]
     - libxkbcommon                       # [linux]
     - libxkbfile                         # [linux]
     - expat                              # [linux]
