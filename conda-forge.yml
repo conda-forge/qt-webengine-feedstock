@@ -1,6 +1,4 @@
 azure:
-  settings_linux:
-    timeoutInMinutes: 1
   settings_osx:
     timeoutInMinutes: 1
   settings_win:
