@@ -11,8 +11,12 @@ source:
   # It looks like current versions are available from official_releases *and*
   # archive, to keep things simple we just use archive for all versions.
   # - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-  - url: https://download.qt.io/archive/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 25da17b8f5087d57482ee727717784edd30942418c5b75fb539103089075e91f
+  # - url: https://download.qt.io/archive/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
+  - url: https://github.com/qt/qtwebengine/archive/refs/tags/v{{ version }}-lts-lgpl.tar.gz
+    sha256: 729931ee0c0f2b3620aa476ae3a6613222e7a6d63ae28c70c4d58c3e39cfc0bd
+  - url: https://github.com/qt/qtwebengine-chromium/archive/8df91f886e7fffb61408e2426f8a90d763a3b6ea.tar.gz
+    sha256: 490b5dce724097d8be048b8ef19ea74b8f984510fe5a3f5fef7ac33d563d594a
+    folder: src/3rdparty
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
