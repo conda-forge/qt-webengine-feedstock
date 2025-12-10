@@ -19,7 +19,7 @@ cxx_compiler:
 cxx_compiler_version:
 - '17'
 github_actions_labels:
-- cirun-openstack-cpu-medium
+- cirun-openstack-cpu-xlarge
 libiconv:
 - '1'
 libjpeg_turbo:

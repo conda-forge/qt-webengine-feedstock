@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2022
 github_actions_labels:
-- cirun-openstack-cpu-medium
+- cirun-openstack-cpu-xlarge
 libiconv:
 - '1'
 libjpeg_turbo:

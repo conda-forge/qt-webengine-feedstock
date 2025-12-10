@@ -27,7 +27,7 @@ fontconfig:
 freetype:
 - '2'
 github_actions_labels:
-- cirun-openstack-cpu-medium
+- cirun-openstack-cpu-xlarge
 libevent:
 - 2.1.12
 libiconv:
