@@ -2,6 +2,8 @@
 
 set -xeuo pipefail
 
+syncqt.pl -version ${PKG_VERSION}
+
 mkdir qtwebengine-build
 pushd qtwebengine-build
 
