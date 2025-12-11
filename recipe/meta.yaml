@@ -7,8 +7,16 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
-    sha256: 25da17b8f5087d57482ee727717784edd30942418c5b75fb539103089075e91f
+  # Older versions are only available from the archive.
+  # It looks like current versions are available from official_releases *and*
+  # archive, to keep things simple we just use archive for all versions.
+  # - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
+  # - url: https://download.qt.io/archive/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
+  - url: https://github.com/qt/qtwebengine/archive/refs/tags/v{{ version }}-lts-lgpl.tar.gz
+    sha256: 729931ee0c0f2b3620aa476ae3a6613222e7a6d63ae28c70c4d58c3e39cfc0bd
+  - url: https://github.com/qt/qtwebengine-chromium/archive/8df91f886e7fffb61408e2426f8a90d763a3b6ea.tar.gz
+    sha256: 490b5dce724097d8be048b8ef19ea74b8f984510fe5a3f5fef7ac33d563d594a
+    folder: src/3rdparty
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
@@ -44,13 +52,14 @@ source:
       - patches/patch-qtwebengine_hb-ft.cc_error.diff
       - patches/patch-qtwebengine-browser-build.gn.diff
       - patches/patch-qtwebengine_v8_build.gn_error.diff
+      - patches/const-fix.patch
 
   - url: https://download.qt.io/development_releases/gnuwin32/gnuwin32.zip  # [win]
     folder: gnuwin32  # [win]
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
@@ -66,12 +75,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
     - pkg-config                         # [unix]
     - make                               # [unix]
     - cmake
@@ -90,8 +93,10 @@ requirements:
     - dbus                               # [linux]
     - fontconfig                         # [linux]
     - freetype                           # [linux]
+    - libgl-devel                        # [linux]
     - libglib                            # [linux]
-    - libxml2                            # [linux]
+    - libxml2-devel                      # [linux]
+    - libxslt                            # [linux]
     - libxkbcommon                       # [linux]
     - libxkbfile                         # [linux]
     - expat                              # [linux]
@@ -138,13 +143,8 @@ test:
   requires:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - {{ cdt('mesa-libgl-devel') }}      # [linux]
-    - {{ cdt('mesa-libegl-devel') }}     # [linux]
-    - {{ cdt('mesa-dri-drivers') }}      # [linux]
-    - {{ cdt('libdrm-devel') }}          # [linux]
-    - {{ cdt('libglvnd-glx') }}          # [linux]
-    - {{ cdt('libglvnd-egl') }}          # [linux]
     - make                               # [unix]
+    - libgl-devel                        # [linux]
   files:
     - test/main-qtwebengine.cpp
     - test/qml.qrc

@@ -2,6 +2,8 @@
 
 set -xeuo pipefail
 
+syncqt.pl -version ${PKG_VERSION}
+
 mkdir qtwebengine-build
 pushd qtwebengine-build
 
@@ -64,8 +66,17 @@ if [[ $(uname) == "Linux" ]]; then
 
     CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT \
         | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
+        | sed "s,^g++.*-o,g++ [...] -o," || true
+    #           ^    use a comma instead of a / to avoid escape sequences
+
+    # Parallel making will ultimately fail, so we do it to retain somewhat
+    # reasonable build times, but fall back to a single-threaded make to finish
+    # the job.
+    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j1 \
+        | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
         | sed "s,^g++.*-o,g++ [...] -o,"
     #           ^    use a comma instead of a / to avoid escape sequences
+
     make install
 fi
 
