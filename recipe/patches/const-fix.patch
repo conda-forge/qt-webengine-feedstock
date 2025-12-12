@@ -1,0 +1,24 @@
+diff -ruN qtwebengine-everywhere-src-5.15.15.orig/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h qtwebengine-everywhere-src-5.15.15/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h
+--- qtwebengine-everywhere-src-5.15.15.orig/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h	2023-07-18 14:12:18.000000000 +0000
++++ qtwebengine-everywhere-src-5.15.15/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h	2025-12-09 14:06:57.129098968 +0000
+@@ -79,7 +79,7 @@
+ 
+   void reset();
+ 
+-  static void ParseErrorFunc(void* user_data, xmlError*);
++  static void ParseErrorFunc(void* user_data, const xmlError*);
+   static void GenericErrorFunc(void* user_data, const char* msg, ...);
+ 
+   // Only for libXSLT callbacks
+diff -ruN qtwebengine-everywhere-src-5.15.15.orig/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc qtwebengine-everywhere-src-5.15.15/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc
+--- qtwebengine-everywhere-src-5.15.15.orig/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc	2023-07-18 14:12:18.000000000 +0000
++++ qtwebengine-everywhere-src-5.15.15/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc	2025-12-09 14:07:19.058838509 +0000
+@@ -60,7 +60,7 @@
+   // It would be nice to do something with this error message.
+ }
+ 
+-void XSLTProcessor::ParseErrorFunc(void* user_data, xmlError* error) {
++void XSLTProcessor::ParseErrorFunc(void* user_data, const xmlError* error) {
+   FrameConsole* console = static_cast<FrameConsole*>(user_data);
+   if (!console)
+     return;
