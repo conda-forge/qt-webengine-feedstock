@@ -20,9 +20,9 @@ source:
     patches:
       - patches/0001-aarch64-sys-state-structs.patch                             # [aarch64]
       - patches/0002-macos-fatal-warnings.patch                                  # [osx]
-      - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64]
+      - patches/0003-Set-host-and-target-cpus-in-gn-build.patch                  # [arm64 or aarch64]
       - patches/0005-macos-use-CONDA_BUILD_SYSROOT.patch                         # [osx]
-      - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64]
+      - patches/0007-Compile-GN-to-support-both-x86_64-and-arm64-archs-wh.patch  # [arm64 or aarch64]
       # hmaarrfk - 2023/12
       #   I generated this patch when I updated the compilers on linux from 11 to 12
       #   during the libxml2212 migration
@@ -59,6 +59,7 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
+  skip: true  # [not aarch64]
   number: 4
   detect_binary_files_with_prefix: true
   run_exports:
