@@ -57,8 +57,7 @@ if [[ $(uname) == "Linux" ]]; then
     done
     popd
 
-    pushd
-    cd "${PREFIX}/mkspecs/modules"
+    pushd "${PREFIX}/mkspecs/modules"
     for f in *.pri; do
         sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
     done
