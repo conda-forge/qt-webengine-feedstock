@@ -80,7 +80,6 @@ requirements:
     - pkg-config                         # [unix]
     - make                               # [unix]
     - cmake
-    - gn <0.0.20231002205700
     - ninja
     - ruby >=2.5                         # [linux]
     - bison                              # [linux]
@@ -89,6 +88,7 @@ requirements:
     - perl 5
     - jom                                # [win]
     - nodejs >=16
+    - qt-main  {{ version }}
   host:
     - libjpeg-turbo
     - pulseaudio-client                  # [linux]
