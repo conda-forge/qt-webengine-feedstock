@@ -2,6 +2,8 @@
 
 set -xeuo pipefail
 
+syncqt.pl -version ${PKG_VERSION}
+
 mkdir qtwebengine-build
 pushd qtwebengine-build
 
@@ -17,16 +19,18 @@ else
 fi
 
 if [[ $(uname) == "Linux" ]]; then
-    ln -s ${GXX} g++ || true
-    ln -s ${GCC} gcc || true
-    ln -s ${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar gcc-ar || true
+    ln -s ${CXX_FOR_BUILD} g++ || true
+    ln -s ${CC_FOR_BUILD} gcc || true
+    # ln -s ${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar gcc-ar || true
+    ln -s ${USED_BUILD_PREFIX}/bin/${BUILD}-gcc-ar gcc-ar || true
 
-    export LD=${GXX}
-    export CC=${GCC}
-    export CXX=${GXX}
+    export LD=${CXX_FOR_BUILD}
+    export CC=${CC_FOR_BUILD}
+    export CXX=${CXX_FOR_BUILD}
 
     chmod +x g++ gcc gcc-ar
-    export PATH=$PREFIX/bin:${PWD}:${PATH}
+    # export PATH=$PREFIX/bin:${PWD}:${PATH}
+    export PATH=${PWD}:${PATH}
 
     which pkg-config
     export PKG_CONFIG_EXECUTABLE=$(which pkg-config)
@@ -55,8 +59,7 @@ if [[ $(uname) == "Linux" ]]; then
     done
     popd
 
-    pushd
-    cd "${PREFIX}/mkspecs/modules"
+    pushd "${PREFIX}/mkspecs/modules"
     for f in *.pri; do
         sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
     done
@@ -64,8 +67,17 @@ if [[ $(uname) == "Linux" ]]; then
 
     CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT \
         | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
+        | sed "s,^g++.*-o,g++ [...] -o," || true
+    #           ^    use a comma instead of a / to avoid escape sequences
+
+    # Parallel making will ultimately fail, so we do it to retain somewhat
+    # reasonable build times, but fall back to a single-threaded make to finish
+    # the job.
+    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j1 \
+        | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
         | sed "s,^g++.*-o,g++ [...] -o,"
     #           ^    use a comma instead of a / to avoid escape sequences
+
     make install
 fi
 
