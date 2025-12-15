@@ -19,23 +19,25 @@ else
 fi
 
 if [[ $(uname) == "Linux" ]]; then
-    # ln -s ${GXX} g++ || true
-    # ln -s ${GCC} gcc || true
+    ln -s ${CXX_FOR_BUILD} g++ || true
+    ln -s ${CC_FOR_BUILD} gcc || true
     # ln -s ${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar gcc-ar || true
+    ln -s ${USED_BUILD_PREFIX}/bin/${BUILD}-gcc-ar gcc-ar || true
 
-    # export LD=${GXX}
-    # export CC=${GCC}
-    # export CXX=${GXX}
+    export LD=${CXX_FOR_BUILD}
+    export CC=${CC_FOR_BUILD}
+    export CXX=${CXX_FOR_BUILD}
 
-    # chmod +x g++ gcc gcc-ar
+    chmod +x g++ gcc gcc-ar
     # export PATH=$PREFIX/bin:${PWD}:${PATH}
+    export PATH=${PWD}:${PATH}
 
-    # which pkg-config
-    # export PKG_CONFIG_EXECUTABLE=$(which pkg-config)
-    # export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig/:$BUILD_PREFIX/lib/pkgconfig/
+    which pkg-config
+    export PKG_CONFIG_EXECUTABLE=$(which pkg-config)
+    export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig/:$BUILD_PREFIX/lib/pkgconfig/
 
-    # # Set QMake prefix to $PREFIX
-    # qmake -set prefix $PREFIX
+    # Set QMake prefix to $PREFIX
+    qmake -set prefix $PREFIX
 
     qmake QMAKE_LIBDIR=${PREFIX}/lib \
         QMAKE_LFLAGS+="-Wl,-rpath,$PREFIX/lib -Wl,-rpath-link,$PREFIX/lib -L$PREFIX/lib" \
