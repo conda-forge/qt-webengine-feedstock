@@ -29,7 +29,7 @@ jobs:
           - CONFIG: linux_aarch64_
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['cirun-openstack-cpu-xlarge--${{ github.run_id }}-linux_aarch64_', 'linux', 'ARM64', 'self-hosted']
+            runs_on: ['cirun-openstack-cpu-xlarge--${{ github.run_id }}-linux_aarch64_', 'linux', 'arm64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
     steps:
 
