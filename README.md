@@ -201,14 +201,10 @@ Feedstock Maintainers
 * [@Tobias-Fischer](https://github.com/Tobias-Fischer/)
 * [@andfoy](https://github.com/andfoy/)
 * [@ccordoba12](https://github.com/ccordoba12/)
-* [@duncanmmacleod](https://github.com/duncanmmacleod/)
 * [@gillins](https://github.com/gillins/)
 * [@mingwandroid](https://github.com/mingwandroid/)
 * [@msarahan](https://github.com/msarahan/)
 * [@ocefpaf](https://github.com/ocefpaf/)
 * [@stuarteberg](https://github.com/stuarteberg/)
 * [@zklaus](https://github.com/zklaus/)
-
-
-<!-- dummy commit to enable rerendering -->
 
