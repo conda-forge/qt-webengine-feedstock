@@ -19,7 +19,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DPython3_EXECUTABLE=${BUILD_PREFIX}/bin/python \
   -DFEATURE_webengine_system_ffmpeg=ON \
   -DFEATURE_webengine_system_icu=ON \
-  -DFEATURE_webengine_system_zlib=ON \
+  -DFEATURE_webengine_system_zlib=OFF \
   -DFEATURE_webengine_system_icu=ON \
   -DFEATURE_webengine_system_re2=ON \
   -DFEATURE_qtpdf_build=OFF \
