@@ -1,21 +1,19 @@
-About qt-webengine
-==================
-
-Home: http://qt.io
-
-Package license: LGPL-3.0-only
+About qt-webengine-feedstock
+============================
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/qt-webengine-feedstock/blob/main/LICENSE.txt)
 
-Summary: Qt is a cross-platform application and UI framework.
+Home: http://qt-project.org/
 
-Development: https://github.com/qt
+Package license: BSD-3-Clause
+
+Summary: Qt WebEngine
+
+Development: https://github.com/qt/qtwebengine
 
 Documentation: http://doc.qt.io/
 
-Qt helps you create connected devices, UIs & applications that run
-anywhere on any device, on any operating system at any time.
-
+Provides support for web applications using the Chromium browser project.
 
 Current build status
 ====================
@@ -38,35 +36,35 @@ Current build status
               <td>linux_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=15313&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=linux&configuration=linux_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>linux_aarch64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=15313&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=15313&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=osx&configuration=osx_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>osx_arm64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=15313&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
               <td>win_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=15313&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=win&configuration=win_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/qt-webengine-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -82,7 +80,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-qt--webengine-green.svg)](https://anaconda.org/conda-forge/qt-webengine) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/qt-webengine.svg)](https://anaconda.org/conda-forge/qt-webengine) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/qt-webengine.svg)](https://anaconda.org/conda-forge/qt-webengine) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/qt-webengine.svg)](https://anaconda.org/conda-forge/qt-webengine) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-qt6--webengine-green.svg)](https://anaconda.org/conda-forge/qt6-webengine) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/qt6-webengine.svg)](https://anaconda.org/conda-forge/qt6-webengine) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/qt6-webengine.svg)](https://anaconda.org/conda-forge/qt6-webengine) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/qt6-webengine.svg)](https://anaconda.org/conda-forge/qt6-webengine) |
 
 Installing qt-webengine
 =======================
@@ -94,41 +92,41 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `qt-webengine` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `qt6-webengine` can be installed with `conda`:
 
 ```
-conda install qt-webengine
-```
-
-or with `mamba`:
-
-```
-mamba install qt-webengine
-```
-
-It is possible to list all of the versions of `qt-webengine` available on your platform with `conda`:
-
-```
-conda search qt-webengine --channel conda-forge
+conda install qt6-webengine
 ```
 
 or with `mamba`:
 
 ```
-mamba search qt-webengine --channel conda-forge
+mamba install qt6-webengine
+```
+
+It is possible to list all of the versions of `qt6-webengine` available on your platform with `conda`:
+
+```
+conda search qt6-webengine --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search qt6-webengine --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search qt-webengine --channel conda-forge
+mamba repoquery search qt6-webengine --channel conda-forge
 
-# List packages depending on `qt-webengine`:
-mamba repoquery whoneeds qt-webengine --channel conda-forge
+# List packages depending on `qt6-webengine`:
+mamba repoquery whoneeds qt6-webengine --channel conda-forge
 
-# List dependencies of `qt-webengine`:
-mamba repoquery depends qt-webengine --channel conda-forge
+# List dependencies of `qt6-webengine`:
+mamba repoquery depends qt6-webengine --channel conda-forge
 ```
 
 
@@ -150,15 +148,15 @@ available continuous integration services. Thanks to the awesome service provide
 [CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
 [Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
 it is possible to build and upload installable packages to the
-[conda-forge](https://anaconda.org/conda-forge) [Anaconda-Cloud](https://anaconda.org/)
+[conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
-To manage the continuous integration and simplify feedstock maintenance
+To manage the continuous integration and simplify feedstock maintenance,
 [conda-smithy](https://github.com/conda-forge/conda-smithy) has been developed.
 Using the ``conda-forge.yml`` within this repository, it is possible to re-render all of
 this feedstock's supporting files (e.g. the CI configuration files) with ``conda smithy rerender``.
 
-For more information please check the [conda-forge documentation](https://conda-forge.org/docs/).
+For more information, please check the [conda-forge documentation](https://conda-forge.org/docs/).
 
 Terminology
 ===========
@@ -185,7 +183,7 @@ merged, the recipe will be re-built and uploaded automatically to the
 everybody to install and use from the `conda-forge` channel.
 Note that all branches in the conda-forge/qt-webengine-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
-on branches in forks and branches in the main repository should only be used to
+on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
@@ -198,13 +196,5 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
-* [@Tobias-Fischer](https://github.com/Tobias-Fischer/)
-* [@andfoy](https://github.com/andfoy/)
-* [@ccordoba12](https://github.com/ccordoba12/)
-* [@duncanmmacleod](https://github.com/duncanmmacleod/)
-* [@gillins](https://github.com/gillins/)
-* [@mingwandroid](https://github.com/mingwandroid/)
-* [@msarahan](https://github.com/msarahan/)
-* [@ocefpaf](https://github.com/ocefpaf/)
-* [@stuarteberg](https://github.com/stuarteberg/)
+* [@conda-forge/qt-main](https://github.com/orgs/conda-forge/teams/qt-main/)
 

@@ -1,9 +1,15 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '11.0'
+MACOSX_SDK_VERSION:
+- '11.0'
 c_compiler:
 - clang
 c_compiler_version:
-- '13'
+- '19'
+c_stdlib:
+- macosx_deployment_target
+c_stdlib_version:
+- '11.0'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,42 +17,31 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '13'
-gst_plugins_base:
-- '1.20'
-gstreamer:
-- '1.20'
-libiconv:
-- '1.16'
-libpng:
-- '1.6'
+- '19'
+ffmpeg:
+- '8'
+lcms2:
+- '2'
+libevent:
+- 2.1.12
 libwebp:
 - '1'
+libxml2:
+- '2.14'
 macos_machine:
 - arm64-apple-darwin20.0.0
 nspr:
 - '4'
 nss:
 - '3'
-pin_run_as_build:
-  libiconv:
-    max_pin: x.x
-  libpng:
-    max_pin: x.x
-  nspr:
-    max_pin: x
-  nss:
-    max_pin: x
-  sqlite:
-    max_pin: x
-  zlib:
-    max_pin: x.x
-sqlite:
-- '3'
+perl:
+- 5.32.1
+re2:
+- 2025.08.12
+snappy:
+- '1.2'
 target_platform:
 - osx-arm64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-zlib:
-- '1.2'
