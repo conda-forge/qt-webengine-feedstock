@@ -23,6 +23,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DFEATURE_webengine_system_icu=ON \
   -DFEATURE_webengine_system_re2=ON \
   -DFEATURE_webengine_system_pulseaudio=OFF \
+  -DFEATURE_webengine_vaapi=OFF \
   -DFEATURE_qtpdf_build=OFF \
   -DFEATURE_qtwebengine_widgets_build=OFF \
   -B build .
