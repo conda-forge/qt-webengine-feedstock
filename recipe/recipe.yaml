@@ -26,6 +26,7 @@ requirements:
         - bison
         - gperf
         - pkg-config
+        - libtool
       else:
         - winflexbison
         - m2-gperf
@@ -45,6 +46,9 @@ requirements:
     - ffmpeg
     - re2
     - snappy
+    - minizip
+    - fontconfig
+    - freetype
     - if: unix
       then:
         - nss

@@ -12,14 +12,13 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DCMAKE_MESSAGE_LOG_LEVEL=STATUS \
   -DPython3_EXECUTABLE=${BUILD_PREFIX}/bin/python \
   -DFEATURE_webengine_system_ffmpeg=ON \
-  -DFEATURE_webengine_system_libevent=ON \
   -DFEATURE_webengine_system_icu=ON \
   -DFEATURE_webengine_system_zlib=OFF \
   -DFEATURE_webengine_system_icu=ON \
   -DFEATURE_webengine_system_re2=ON \
   -DFEATURE_qtpdf_build=OFF \
   -DFEATURE_qtwebengine_widgets_build=OFF \
-  -DFEATURE_webengine_system_pulseaudio=OFF \
-  -DFEATURE_webengine_jumbo_file_merge_limit=16 \
   -B build .
 cmake --build build --target install
+
+test -f ${PREFIX}/lib/libQt6WebEngine${SHLIB_EXT}
