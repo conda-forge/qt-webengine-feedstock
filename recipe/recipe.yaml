@@ -20,6 +20,7 @@ requirements:
     - perl
     - nodejs >=24
     - html5lib
+    - spdx-tools
     - gn
     - if: unix
       then:
@@ -49,6 +50,7 @@ requirements:
     - minizip
     - fontconfig
     - freetype
+    - expat
     - if: unix
       then:
         - nss
