@@ -1,0 +1,68 @@
+From b8d87f33755309ed770fe09d5ddafa3cf04da453 Mon Sep 17 00:00:00 2001
+From: Rafael Martins <rmartins@anaconda.com>
+Date: Tue, 16 Jul 2024 23:11:13 +0200
+Subject: [PATCH 3/6] *: allow building with non-apple clang version.
+
+we use upstream clang, that is not part of xcode, we need this patch to force building
+with our clang.
+
+---
+ configure.cmake                                      | 4 ++--
+ src/gn/CMakeLists.txt                                | 2 +-
+ src/3rdparty/chromium/build/config/compiler/BUILD.gn | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/configure.cmake b/configure.cmake
+index 86c120248..9d5b70a60 100644
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -460,7 +460,7 @@ qt_webengine_configure_check("compiler"
+     CONDITION MSVC OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+-        (MACOS AND CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
++        (MACOS AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+     MESSAGE
+         "${CMAKE_CXX_COMPILER_ID} compiler is not supported."
+ )
+@@ -469,7 +469,7 @@ qt_webengine_configure_check("compiler"
+     CONDITION MSVC OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+-        (APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR
++        (APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+         (ANDROID AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+diff --git a/src/gn/CMakeLists.txt b/src/gn/CMakeLists.txt
+index 09202364e..7f76067b9 100644
+--- a/src/gn/CMakeLists.txt
++++ b/src/gn/CMakeLists.txt
+@@ -49,7 +49,7 @@ elseif(MSVC)
+     set(platform msvc)
+ elseif(MINGW)
+     set(platform mingw)
+-elseif(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL AppleClang)
++elseif(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+     set(platform darwin)
+ else()
+     message(FATAL_ERROR "Unsupported gn platform !")
+diff --git a/src/3rdparty/chromium/build/config/compiler/BUILD.gn b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
+index f596aa2..e238f69 100644
+--- a/src/3rdparty/chromium/build/config/compiler/BUILD.gn
++++ b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
+@@ -2240,9 +2240,9 @@ config("default_warnings") {
+   }
+
+   # TODO(crbug.com/355446806): Clean up and enable.
+-  if (is_apple) {
+-    ldflags += [ "-Wl,-no_warn_duplicate_libraries" ]
+-  }
++#  if (is_apple) {
++#    ldflags += [ "-Wl,-no_warn_duplicate_libraries" ]
++#  }
+
+   # Rust warnings
+
+--
+2.49.0
