@@ -1,0 +1,27 @@
+From 790d4b80a60035c244294321a8dee5fe3146323f Mon Sep 17 00:00:00 2001
+From: Andrii Osipov <aosipov@anaconda.com>
+Date: Tue, 27 Jan 2026 06:14:54 -0800
+Subject: [PATCH] Add gnu resource
+
+---
+ src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c b/src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c
+index 5f0eddc471..f2434f2b94 100644
+--- a/src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c
++++ b/src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c
+@@ -31,6 +31,10 @@
+  * DEALINGS IN THE SOFTWARE.
+  */
+ 
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE
++#endif
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdbool.h>
+-- 
+2.39.3 (Apple Git-146)
+

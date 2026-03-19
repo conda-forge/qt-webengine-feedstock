@@ -11,7 +11,11 @@ source:
   md5: cab991d3174f9039b94b46fd98b0cee1
   patches:
     - patches/0003-allow-building-with-non-apple-clang-version.patch
-    - patches/memfd-cloexec.patch
+      #- patches/memfd-cloexec.patch
+    - patches/sysmemfd.patch
+
+    # Missing _GNU_SOURCE macro definition causes asprintf and vasprintf functions to be undeclared in glibc headers
+    - patches/0010-Add-gnu-resource.patch
 
 build:
   number: 0
