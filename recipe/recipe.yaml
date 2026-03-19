@@ -51,6 +51,8 @@ requirements:
     - fontconfig
     - freetype
     - expat
+    - openjpeg
+    - zlib
     - if: unix
       then:
         - nss
@@ -58,6 +60,7 @@ requirements:
         - libvpx
     - if: linux
       then:
+        - libudev
         - libxkbfile
         - libgl-devel
         - libegl-devel
