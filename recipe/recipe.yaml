@@ -21,7 +21,6 @@ requirements:
     - nodejs >=24
     - html5lib
     - spdx-tools
-    - gn
     - if: unix
       then:
         - bison
@@ -53,6 +52,7 @@ requirements:
     - expat
     - openjpeg
     - zlib
+    - glib
     - if: unix
       then:
         - nss

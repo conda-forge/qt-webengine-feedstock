@@ -3,6 +3,12 @@
 if test "$CONDA_BUILD_CROSS_COMPILATION" = "1"
 then
   CMAKE_ARGS="${CMAKE_ARGS} -DQT_HOST_PATH=${BUILD_PREFIX}"
+
+  # gn
+  CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD CFLAGS= CXXFLAGS= CPPFLAGS= LDFLAGS=${LDFLAGS//$PREFIX/$BUILD_PREFIX} \
+    cmake -G "Ninja" -DCMAKE_PREFIX_PATH=$BUILD_PREFIX -DCMAKE_INSTALL_PREFIX=$PWD/build_native_gn/install -B build_native_gn src/gn
+  cmake --build build_native_gn --target install
+  CMAKE_ARGS="${CMAKE_ARGS} -DGn_EXECUTABLE=$PWD/build_native_gn/install/bin/gn"
 fi
 
 cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
@@ -13,7 +19,7 @@ cmake -LAH -G "Ninja" ${CMAKE_ARGS} \
   -DPython3_EXECUTABLE=${BUILD_PREFIX}/bin/python \
   -DFEATURE_webengine_system_ffmpeg=ON \
   -DFEATURE_webengine_system_icu=ON \
-  -DFEATURE_webengine_system_zlib=OFF \
+  -DFEATURE_webengine_system_zlib=ON \
   -DFEATURE_webengine_system_icu=ON \
   -DFEATURE_webengine_system_re2=ON \
   -DFEATURE_qtpdf_build=OFF \
