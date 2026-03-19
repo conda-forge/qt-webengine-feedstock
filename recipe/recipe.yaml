@@ -1,0 +1,92 @@
+context:
+  version: "6.10.2"
+  maj_min: ${{ (version | split('.'))[:2] | join('.') }}
+
+package:
+  name: qt6-webengine
+  version: ${{ version }}
+
+source:
+  url: https://download.qt.io/official_releases/qt/${{ maj_min }}/${{ version }}/submodules/qtwebengine-everywhere-src-${{ version }}.tar.xz
+  md5: cab991d3174f9039b94b46fd98b0cee1
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - cmake
+    - ninja
+    - perl
+    - nodejs >=24
+    - html5lib
+    - gn
+    - if: unix
+      then:
+        - bison
+        - gperf
+        - pkg-config
+      else:
+        - winflexbison
+        - m2-gperf
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('c') }}
+    - ${{ stdlib("c") }}
+    - if: build_platform != target_platform
+      then: qt6-main ${{ version }}.*
+  host:
+    - qt6-main ${{ version }}.*
+    - libevent
+    - libxml2
+    - libxslt
+    - libopus
+    - libwebp
+    - lcms2
+    - ffmpeg
+    - re2
+    - snappy
+    - if: unix
+      then:
+        - nss
+        - nspr
+        - libvpx
+    - if: linux
+      then:
+        - libxkbfile
+        - libgl-devel
+        - libegl-devel
+        - libopengl-devel
+    - if: not osx
+      then:
+        - libvulkan-headers
+        - libvulkan-loader
+  run:
+    - qt6-main ${{ version }}.*
+  run_exports:
+    - ${{ pin_subpackage('qt6-webengine', upper_bound='x.x') }}
+
+tests:
+  - script:
+    - if: unix
+      then:
+        - test -d $PREFIX/include/qt6/QtWebEngine
+        - test -f $PREFIX/lib/libQt6WebEngine${SHLIB_EXT}
+      else:
+        - if not exist %PREFIX%\\Library\\include\\qt6\\QtWebEngine exit 1
+        - if not exist %PREFIX%\\Library\\lib\\Qt6WebEngine.lib exit 1
+        - if not exist %PREFIX%\\Library\\bin\\Qt6WebEngine.dll exit 1
+
+about:
+  homepage: http://qt-project.org
+  license: BSD-3-Clause
+  license_file: LICENSE.Chromium
+  summary: Qt WebEngine
+  description: |
+    Provides support for web applications using the Chromium browser project.
+  documentation: http://doc.qt.io/
+  repository: https://github.com/qt/qtwebengine
+
+extra:
+  recipe-maintainers:
+    - conda-forge/qt-main
+  feedstock-name: qt-webengine
