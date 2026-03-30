@@ -74,9 +74,6 @@ CMAKE_ARGS="${CMAKE_ARGS} -DQT_HOST_PATH=${PREFIX}"
 
 CMAKE_ARGS="${CMAKE_ARGS} -DFEATURE_webengine_spellchecker=OFF"
 
-# not enough RAM
-export CPU_COUNT=4
-
 # IMPORTANT: Chromium didn't add flags to unvendor protobuf until very recently and not even the latest Qt 6.9.1
 # release has them included yet. We can't fix it until we upgrade Qt versions to maybe 6.10. That is the reason why
 # we're removing these headers and we should be able to stop as soon as Chromium provides a build option to
