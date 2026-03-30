@@ -1,0 +1,111 @@
+From 0a6e019945d17c1dd416b66324a69bcf890eee68 Mon Sep 17 00:00:00 2001
+From: Rafael Martins <rmartins@anaconda.com>
+Date: Tue, 27 Jan 2026 04:11:14 -0800
+Subject: [PATCH] chromium: add conda CDT include paths to include_dirs
+
+---
+ src/3rdparty/chromium/build/config/BUILD.gn           |  5 +++++
+ src/3rdparty/chromium/build/config/compiler/BUILD.gn  | 11 ++++++++++-
+ src/3rdparty/chromium/third_party/angle/BUILD.gn      | 11 ++++++++++-
+ .../chromium/third_party/vulkan-headers/src/BUILD.gn  | 11 ++++++++++-
+ 4 files changed, 35 insertions(+), 3 deletions(-)
+
+diff --git a/src/3rdparty/chromium/build/config/BUILD.gn b/src/3rdparty/chromium/build/config/BUILD.gn
+index b85ffcde3f..753fe6b413 100644
+--- a/src/3rdparty/chromium/build/config/BUILD.gn
++++ b/src/3rdparty/chromium/build/config/BUILD.gn
+@@ -192,6 +192,9 @@ config("default_libs") {
+       # some extra libraries, please just add a libs = [ "foo.lib" ] to your
+       # target that needs it.
+     ]
++
++    lib_dirs = [ getenv("LIBRARY_LIB") ]
++
+     if (current_os == "winuwp") {
+       # These libraries are needed for Windows UWP (i.e. store apps).
+       libs += [
+@@ -215,6 +218,7 @@ config("default_libs") {
+     # Targets should choose to explicitly link frameworks they require. Since
+     # linking can have run-time side effects, nothing should be listed here.
+     libs = []
++    lib_dirs = [ getenv("PREFIX") + "/lib" ]
+   } else if (is_ios) {
+     # Targets should choose to explicitly link frameworks they require. Since
+     # linking can have run-time side effects, nothing should be listed here.
+@@ -225,6 +229,7 @@ config("default_libs") {
+       "pthread",
+       "rt",
+     ]
++    lib_dirs = [ getenv("PREFIX") + "/lib" ]
+   }
+ }
+ 
+diff --git a/src/3rdparty/chromium/build/config/compiler/BUILD.gn b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
+index b6a9cfb205..8009efb136 100644
+--- a/src/3rdparty/chromium/build/config/compiler/BUILD.gn
++++ b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
+@@ -252,7 +252,16 @@ assert(!(llvm_force_head_revision && use_remoteexec && host_os != "linux"),
+ # source root and might have conflicting versions of some headers) can remove
+ # this and specify their own include paths.
+ config("default_include_dirs") {
+-  include_dirs = [
++  if (is_win) {
++    include_dirs = []
++  } else {
++    include_dirs = [
++      getenv("PREFIX") + "/include",
++      getenv("BUILD_PREFIX") + "/" + getenv("HOST") + "/sysroot/usr/include"
++    ]
++  }
++
++  include_dirs += [
+     root_gen_dir,
+     "//",
+   ]
+diff --git a/src/3rdparty/chromium/third_party/angle/BUILD.gn b/src/3rdparty/chromium/third_party/angle/BUILD.gn
+index 34b9fedebf..dcd8f1c8ef 100644
+--- a/src/3rdparty/chromium/third_party/angle/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/angle/BUILD.gn
+@@ -464,7 +464,16 @@ config("angle_asserts_config") {
+ }
+ 
+ config("angle_common_config") {
+-  include_dirs = [
++  if (is_win) {
++    include_dirs = []
++  } else {
++    include_dirs = [
++      getenv("PREFIX") + "/include",
++      getenv("BUILD_PREFIX") + "/" + getenv("HOST") + "/sysroot/usr/include"
++    ]
++  }
++
++  include_dirs += [
+     "src/common/base",
+     "src/common/third_party/xxhash",
+   ]
+diff --git a/src/3rdparty/chromium/third_party/vulkan-headers/src/BUILD.gn b/src/3rdparty/chromium/third_party/vulkan-headers/src/BUILD.gn
+index 7ec9577338..1a7d960a34 100644
+--- a/src/3rdparty/chromium/third_party/vulkan-headers/src/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/vulkan-headers/src/BUILD.gn
+@@ -6,7 +6,16 @@
+ import("//build_overrides/vulkan_headers.gni")
+ 
+ config("vulkan_headers_config") {
+-  include_dirs = [ "include" ]
++  if (is_win) {
++    include_dirs = []
++  } else {
++    include_dirs = [
++      getenv("PREFIX") + "/include",
++      getenv("BUILD_PREFIX") + "/" + getenv("HOST") + "/sysroot/usr/include"
++    ]
++  }
++
++  include_dirs += [ "include" ]
+   defines = []
+ 
+   if (is_win) {
+-- 
+2.39.3 (Apple Git-146)
+

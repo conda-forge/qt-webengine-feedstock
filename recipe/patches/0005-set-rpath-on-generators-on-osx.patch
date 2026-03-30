@@ -1,0 +1,351 @@
+From 96f73853bd483fede20dfc70c00197d6d2980a83 Mon Sep 17 00:00:00 2001
+From: Brian Wing <bwing@anaconda.com>
+Date: Mon, 18 Aug 2025 13:51:38 -0400
+Subject: [PATCH] Set RC_PATH on generator executables on OSX.
+
+This ensures that binaries that get run during the build process
+can find the unvendored libs they need.
+
+---
+ cmake/QtToolchainHelpers.cmake                                 | 41 +++++++++++++++++++++--------------------
+ src/3rdparty/chromium/build/config/clang/BUILD.gn              |  6 ++++++
+ src/3rdparty/chromium/build/mac/find_sdk.py                    | 15 ++++++++++-----
+ .../spoof_checks/top_domains/BUILD.gn                          |  4 ++++
+ src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn       |  4 ++++
+ .../transport_security_state_generator/BUILD.gn                |  4 ++++
+ .../src/libANGLE/renderer/metal/metal_backend.gni              |  3 +--
+ .../angle/third_party/flatbuffers/BUILD.gn                     |  4 ++++
+ .../third_party/blink/renderer/platform/BUILD.gn               |  4 ++++
+ src/3rdparty/chromium/third_party/flatbuffers/BUILD.gn         |  4 ++++
+ .../perfetto/src/ipc/protoc_plugin/BUILD.gn                    |  4 ++++
+ .../perfetto/src/protozero/protoc_plugin/BUILD.gn              |  8 ++++++++
+ src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn |  4 ++++
+ src/3rdparty/chromium/third_party/protobuf/BUILD.gn            |  5 +++++
+ src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn       |  8 ++++++++
+ src/3rdparty/chromium/v8/BUILD.gn                              |  5 +++++
+ 16 files changed, 96 insertions(+), 27 deletions(-)
+
+diff --git a/cmake/QtToolchainHelpers.cmake b/cmake/QtToolchainHelpers.cmake
+index eaa3a43..4a1a1bb 100644
+--- a/cmake/QtToolchainHelpers.cmake
++++ b/cmake/QtToolchainHelpers.cmake
+@@ -3,26 +3,26 @@
+
+ function(get_darwin_sdk_version result)
+     if(APPLE)
+-        if(IOS)
+-            set(sdk_name "iphoneos")
+-        elseif(TVOS)
+-            set(sdk_name "appletvos")
+-        elseif(WATCHOS)
+-            set(sdk_name "watchos")
+-        else()
+-            # Default to macOS
+-            set(sdk_name "macosx")
+-        endif()
+-        set(xcrun_version_arg "--show-sdk-version")
+-        execute_process(COMMAND /usr/bin/xcrun --sdk ${sdk_name} ${xcrun_version_arg}
+-                        OUTPUT_VARIABLE sdk_version
+-                        ERROR_VARIABLE xcrun_error)
+-        if(NOT sdk_version)
+-            message(FATAL_ERROR
+-                    "Can't determine darwin ${sdk_name} SDK version. Error: ${xcrun_error}")
+-        endif()
+-        string(STRIP "${sdk_version}" sdk_version)
+-        set(${result} "${sdk_version}" PARENT_SCOPE)
++#        if(IOS)
++#            set(sdk_name "iphoneos")
++#        elseif(TVOS)
++#            set(sdk_name "appletvos")
++#        elseif(WATCHOS)
++#            set(sdk_name "watchos")
++#        else()
++#            # Default to macOS
++#            set(sdk_name "macosx")
++#        endif()
++#        set(xcrun_version_arg "--show-sdk-version")
++#        execute_process(COMMAND /usr/bin/xcrun --sdk ${sdk_name} ${xcrun_version_arg}
++#                        OUTPUT_VARIABLE sdk_version
++#                        ERROR_VARIABLE xcrun_error)
++#        if(NOT sdk_version)
++#            message(FATAL_ERROR
++#                    "Can't determine darwin ${sdk_name} SDK version. Error: ${xcrun_error}")
++#        endif()
++#        string(STRIP "${sdk_version}" sdk_version)
++        set(${result} "$ENV{OSX_SDK_VER}" PARENT_SCOPE)
+     endif()
+ endfunction()
+
+@@ -384,6 +384,7 @@ macro(append_compiler_linker_sdk_setup)
+                 use_system_xcode=true
+                 mac_deployment_target="${CMAKE_OSX_DEPLOYMENT_TARGET}"
+                 mac_sdk_min="${macSdkVersion}"
++                mac_sdk_path="${CMAKE_OSX_SYSROOT}"
+                 use_libcxx=true
+             )
+             _qt_internal_get_apple_sdk_version(apple_sdk_version)
+diff --git a/src/3rdparty/chromium/build/config/clang/BUILD.gn b/src/3rdparty/chromium/build/config/clang/BUILD.gn
+index 9b8719a64ba7..dbe5efc5c235 100644
+--- a/src/3rdparty/chromium/build/config/clang/BUILD.gn
++++ b/src/3rdparty/chromium/build/config/clang/BUILD.gn
+@@ -277,3 +277,9 @@ clang_lib("compiler_profile") {
+     libname = "profile"
+   }
+ }
++
++config("rpath_for_built_shared_libraries") {
++  if(is_mac) {
++    ldflags = [ "-Wl,-rpath," + getenv("PREFIX") + "/lib" ]
++  }
++}
+diff --git a/src/3rdparty/chromium/build/mac/find_sdk.py b/src/3rdparty/chromium/build/mac/find_sdk.py
+index 3dcc4d5d36bf..6457d57d358a 100755
+--- a/src/3rdparty/chromium/build/mac/find_sdk.py
++++ b/src/3rdparty/chromium/build/mac/find_sdk.py
+@@ -69,14 +69,15 @@ def main():
+     print(err, file=sys.stderr)
+     raise Exception('Error %d running xcode-select' % job.returncode)
+   dev_dir = out.decode('UTF-8').rstrip()
+-  sdk_dir = os.path.join(
+-      dev_dir, 'Platforms/MacOSX.platform/Developer/SDKs')
++  sdk_dir = os.environ.get("OSX_SDK_DIR")
++  if sdk_dir is None:
++    sdk_dir = os.path.join(dev_dir, 'SDKs')
+ 
+   if not os.path.isdir(sdk_dir):
+     raise SdkError('Install Xcode, launch it, accept the license ' +
+       'agreement, and run `sudo xcode-select -s /path/to/Xcode.app` ' +
+       'to continue.')
+-  sdks = [re.findall('^MacOSX(\d+\.\d+)\.sdk$', s) for s in os.listdir(sdk_dir)]
++  sdks = [re.findall(r'^MacOSX(\d+\.\d+)\.sdk$', s) for s in os.listdir(sdk_dir)]
+   sdks = [s[0] for s in sdks if s]  # [['10.5'], ['10.6']] => ['10.5', '10.6']
+   sdks = [s for s in sdks  # ['10.5', '10.6'] => ['10.6']
+           if parse_version(s) >= parse_version(min_sdk_version)]
+@@ -90,8 +91,12 @@ def main():
+     print(sdk_path)
+ 
+   if options.print_bin_path:
+-    bin_path = 'Toolchains/XcodeDefault.xctoolchain/usr/bin/'
+-    print(os.path.join(dev_dir, bin_path))
++    prefix = os.environ.get("BUILD_PREFIX")
++    if prefix is not None:
++      print(prefix + "/bin/")
++    else:
++      bin_path = 'Toolchains/XcodeDefault.xctoolchain/usr/bin/'
++      print(os.path.join(dev_dir, bin_path))
+ 
+   if options.print_sdk_build:
+     system_version_plist = os.path.join(sdk_path,
+diff --git a/src/3rdparty/chromium/components/url_formatter/spoof_checks/top_domains/BUILD.gn b/src/3rdparty/chromium/components/url_formatter/spoof_checks/top_domains/BUILD.gn
+index 9fd8cc4831e6..99a1fcf0dfd1 100644
+--- a/src/3rdparty/chromium/components/url_formatter/spoof_checks/top_domains/BUILD.gn
++++ b/src/3rdparty/chromium/components/url_formatter/spoof_checks/top_domains/BUILD.gn
+@@ -19,6 +19,10 @@ if (!is_ios && !is_android) {
+ }
+ 
+ executable("top_domain_generator") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [
+     "top_domain_generator.cc",
+     "top_domain_state_generator.cc",
+diff --git a/src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn b/src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn
+index cc79bb3babb2..9242d905c4d1 100644
+--- a/src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn
++++ b/src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn
+@@ -4,6 +4,10 @@
+ 
+ # TODO(crbug.com/40770548): add unit tests
+ executable("root_store_tool") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "root_store_tool.cc" ]
+   deps = [
+     "//base",
+diff --git a/src/3rdparty/chromium/net/tools/transport_security_state_generator/BUILD.gn b/src/3rdparty/chromium/net/tools/transport_security_state_generator/BUILD.gn
+index 575165d53bb6..968417362132 100644
+--- a/src/3rdparty/chromium/net/tools/transport_security_state_generator/BUILD.gn
++++ b/src/3rdparty/chromium/net/tools/transport_security_state_generator/BUILD.gn
+@@ -46,6 +46,10 @@ source_set("transport_security_state_generator_test_sources") {
+ }
+ 
+ executable("transport_security_state_generator") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "transport_security_state_generator.cc" ]
+   deps = [
+     ":transport_security_state_generator_sources",
+diff --git a/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni b/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni
+index d3a8a1d6ecc3..9f105535a20e 100644
+--- a/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni
++++ b/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni
+@@ -92,8 +92,7 @@ metal_backend_sources = [
+ # We can build the ANGLE internal shaders at build-time if we have access to the Mac SDK in the "build" dir.
+ # Building internal shaders for iOS is not supported. The Chromium Mac SDK does not have all the required files.
+ # This is also an issue when cross-compiling for mac.
+-metal_internal_shader_compilation_supported =
+-    angle_has_build && !is_ios && target_os == host_os
++metal_internal_shader_compilation_supported = false
+ 
+ metal_internal_shaders_header =
+     "$root_gen_dir/angle/mtl_internal_shaders_metallib.h"
+diff --git a/src/3rdparty/chromium/third_party/angle/third_party/flatbuffers/BUILD.gn b/src/3rdparty/chromium/third_party/angle/third_party/flatbuffers/BUILD.gn
+index 4978bc0ca68b..22609cedb674 100644
+--- a/src/3rdparty/chromium/third_party/angle/third_party/flatbuffers/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/angle/third_party/flatbuffers/BUILD.gn
+@@ -134,6 +134,10 @@ source_set("compiler_files") {
+ }
+ 
+ executable("flatc") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "src/src/flatc_main.cpp" ]
+   deps = [
+     ":compiler_files",
+diff --git a/src/3rdparty/chromium/third_party/blink/renderer/platform/BUILD.gn b/src/3rdparty/chromium/third_party/blink/renderer/platform/BUILD.gn
+index edc85a784f3c..0b82a44760cb 100644
+--- a/src/3rdparty/chromium/third_party/blink/renderer/platform/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/blink/renderer/platform/BUILD.gn
+@@ -135,6 +135,10 @@ compiled_action("character_data") {
+ }
+ 
+ executable("character_data_generator") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [
+     "text/character_property.h",
+     "text/character_property_data.h",
+diff --git a/src/3rdparty/chromium/third_party/flatbuffers/BUILD.gn b/src/3rdparty/chromium/third_party/flatbuffers/BUILD.gn
+index 505b5aa15c84..47ca83860505 100644
+--- a/src/3rdparty/chromium/third_party/flatbuffers/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/flatbuffers/BUILD.gn
+@@ -134,6 +134,10 @@ source_set("compiler_files") {
+ }
+ 
+ executable("flatc") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "src/src/flatc_main.cpp" ]
+   deps = [
+     ":compiler_files",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/ipc/protoc_plugin/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/ipc/protoc_plugin/BUILD.gn
+index 57dcb51d60aa..821f76a94fea 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/ipc/protoc_plugin/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/ipc/protoc_plugin/BUILD.gn
+@@ -15,6 +15,10 @@
+ import("../../../gn/perfetto_host_executable.gni")
+ 
+ perfetto_host_executable("ipc_plugin") {
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs = [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "ipc_plugin.cc" ]
+   deps = [
+     "../../../gn:default_deps",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/protozero/protoc_plugin/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/protozero/protoc_plugin/BUILD.gn
+index b9139db2ffbe..c2da1d8536de 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/protozero/protoc_plugin/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/protozero/protoc_plugin/BUILD.gn
+@@ -17,6 +17,10 @@ import("../../../gn/perfetto_host_executable.gni")
+ # The plugin that generates zero-copy serializers and deserializers. Those are
+ # the xxx.pbzero.h headers used all over the codebase.
+ perfetto_host_executable("protozero_plugin") {
++  if (is_mac && !is_component_build) {
++  # Set rpath to find shared libs in a non-component build.
++    configs = [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "protozero_plugin.cc" ]
+   deps = [
+     "../../../gn:default_deps",
+@@ -29,6 +33,10 @@ perfetto_host_executable("protozero_plugin") {
+ # This is used for core classes traced needs to know about such as
+ # DataSourceDescriptor.
+ perfetto_host_executable("cppgen_plugin") {
++  if (is_mac && !is_component_build) {
++  # Set rpath to find shared libs in a non-component build.
++    configs = [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
+   sources = [ "cppgen_plugin.cc" ]
+   deps = [
+     "../../../gn:default_deps",
+diff --git a/src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn b/src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn
+index 552cb4111510..1f91de9afee8 100644
+--- a/src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn
+@@ -5,6 +5,10 @@
+ # Only compile the compiler for the host architecture.
+ if (current_toolchain == host_toolchain) {
+   executable("protoc-gen-js") {
++    if (is_mac && !is_component_build) {
++      # Set rpath to find shared libs in a non-component build.
++      configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++    }
+     sources = [
+       "src/generator/js_generator.cc",
+       "src/generator/js_generator.h",
+diff --git a/src/3rdparty/chromium/third_party/protobuf/BUILD.gn b/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
+index bb9ef86c0edb..addba7573ccb 100644
+--- a/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
+@@ -301,6 +301,11 @@ if (current_toolchain == host_toolchain) {
+     configs -= [ "//build/config/compiler:chromium_code" ]
+     configs += [ "//build/config/compiler:no_chromium_code" ]
+ 
++    if (is_mac && !is_component_build) {
++      # Set rpath to find shared libs in a non-component build.
++      configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++    }
++
+     cflags = protobuf_lite_cflags
+ 
+     deps = [
+diff --git a/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn b/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn
+index 35c8c606a220..b9100ba2db35 100644
+--- a/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn
++++ b/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn
+@@ -99,6 +99,14 @@ if (use_v8_context_snapshot) {
+         "//v8",
+       ]
+ 
++      if (is_mac && !is_component_build) {
++        # Set rpath to find shared libs in a non-component build.
++        configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++
++        # Need the host prefix for this one since it runs during the build.
++        ldflags = [ "-Wl,-rpath," + getenv("PREFIX") + "/lib" ]
++      }
++
+       configs += [
+         "//v8:external_startup_data",
+         ":disable_icf",
+diff --git a/src/3rdparty/chromium/v8/BUILD.gn b/src/3rdparty/chromium/v8/BUILD.gn
+index dcc3acbf8b36..a420aa876b28 100644
+--- a/src/3rdparty/chromium/v8/BUILD.gn
++++ b/src/3rdparty/chromium/v8/BUILD.gn
+@@ -778,6 +778,11 @@ config("internal_config") {
+     ":cppgc_header_features",
+   ]
+ 
++  if (is_mac && !is_component_build) {
++    # Set rpath to find shared libs in a non-component build.
++    configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
++  }
++
+   if (is_component_build) {
+     defines += [ "BUILDING_V8_SHARED_PRIVATE" ]
+   } else if (v8_expose_public_symbols) {
+-- 
+2.49.0

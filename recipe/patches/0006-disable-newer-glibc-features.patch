@@ -1,0 +1,29 @@
+From cf2d5da9f3931df803d26e53f77eb6d9c5228731 Mon Sep 17 00:00:00 2001
+From: Brian Wing <bwing@anaconda.com>
+Date: Mon, 18 Aug 2025 15:05:50 -0400
+Subject: [PATCH] Disable newer glibc features.
+
+glibc added sys/ifunc.h sometime around v2.30. Since we're currently building with v2.28 and don't have this header,
+we disable the feature.
+
+---
+ .../partition_allocator/src/partition_alloc/aarch64_support.h | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
+index 600d4ed78437..3a747a04f932 100644
+--- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
++++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
+@@ -10,10 +10,6 @@
+ #include "partition_alloc/build_config.h"
+ #include "partition_alloc/buildflags.h"
+
+-#if PA_BUILDFLAG(IS_ANDROID) || PA_BUILDFLAG(IS_LINUX)
+-#define HAS_HW_CAPS
+-#endif
+-
+ #if PA_BUILDFLAG(PA_ARCH_CPU_ARM64) && defined(HAS_HW_CAPS)
+ #include <asm/hwcap.h>
+ #include <sys/ifunc.h>
+--
+2.49.0
