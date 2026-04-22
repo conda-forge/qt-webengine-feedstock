@@ -9,19 +9,25 @@ channel_targets:
 cxx_compiler:
 - vs2022
 github_actions_labels:
-- cirun-openstack-cpu-xlarge
-libiconv:
-- '1'
-libjpeg_turbo:
-- '3'
+- blacksmith-8vcpu-windows-2025
+glib:
+- '2'
+libevent:
+- 2.1.12
 libpng:
 - '1.6'
-libsqlite:
-- '3'
-libwebp:
-- '1'
-qt:
-- '5.15'
+libtiff:
+- '4.7'
+libxml2_devel:
+- '2.14'
+openjpeg:
+- '2'
+perl:
+- 5.32.1
+re2:
+- 2025.11.05
+snappy:
+- '1.2'
 target_platform:
 - win-64
 zlib:
