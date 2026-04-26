@@ -1,5 +1,5 @@
 {% set name = "qt-webengine" %}
-{% set version = "5.15.15" %}
+{% set version = "5.15.18" %}
 {% set version_major_minor = '.'.join(version.split('.')[:2]) %}
 
 package:
@@ -13,7 +13,7 @@ source:
   # - url: https://download.qt.io/official_releases/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
   # - url: https://download.qt.io/archive/qt/{{ version_major_minor }}/{{ version }}/submodules/qtwebengine-everywhere-opensource-src-{{ version }}.tar.xz
   - url: https://github.com/qt/qtwebengine/archive/refs/tags/v{{ version }}-lts-lgpl.tar.gz
-    sha256: 729931ee0c0f2b3620aa476ae3a6613222e7a6d63ae28c70c4d58c3e39cfc0bd
+    sha256: 789cf0fe07ced73415cf95e6587b93c256e3966bc5c35261012948972e1f2355
   - url: https://github.com/qt/qtwebengine-chromium/archive/8df91f886e7fffb61408e2426f8a90d763a3b6ea.tar.gz
     sha256: 490b5dce724097d8be048b8ef19ea74b8f984510fe5a3f5fef7ac33d563d594a
     folder: src/3rdparty
@@ -59,11 +59,11 @@ source:
     sha256: 4a9dc893cc0a1695a16102a42ef47ef2e228652891f4afea67fadd452b63656b  # [win]
 
 build:
-  number: 4
+  number: 0
   detect_binary_files_with_prefix: true
   run_exports:
     - {{ pin_subpackage('qt-webengine', max_pin='x.x') }}
-  missing_dso_whitelist:  # [osx]
+  missing_dso_whitelist:   # [osx]
     - /usr/lib/libbsm.0.dylib  # [osx]
     - /usr/lib/libcups.2.dylib  # [osx]
     - /usr/lib/libresolv.9.dylib  # [osx]
