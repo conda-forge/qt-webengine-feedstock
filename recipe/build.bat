@@ -74,6 +74,8 @@ cmake --log-level STATUS -S . -Bbuild -GNinja ^
     -DQT_FEATURE_webengine_system_zlib=OFF
 if errorlevel 1 exit 1
 
+
+set "CPU_COUNT=4"
 cmake --build build --target install --config Release -j %CPU_COUNT%
 if errorlevel 1 exit 1
 

@@ -37,7 +37,7 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['blacksmith-8vcpu-windows-2025']
+            runs_on: ['namespace-profile-8cpu-on-win-64']
     steps:
 
     - name: Checkout code
@@ -110,7 +110,7 @@ jobs:
       env:
         # default value; make it explicit, as it needs to match with artefact
         # generation below. Not configurable for now, can be revisited later
-        CONDA_BLD_PATH: C:\bld
+        CONDA_BLD_PATH: D:\bld
         MINIFORGE_HOME: ${{ contains(runner.arch, 'ARM') && 'C' || 'D' }}:\Miniforge
         PYTHONUNBUFFERED: 1
         CONFIG: ${{ matrix.CONFIG }}

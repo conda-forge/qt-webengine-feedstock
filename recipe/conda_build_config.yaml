@@ -7,4 +7,4 @@ github_actions_labels:
 - blacksmith-8vcpu-ubuntu-2404  # [linux64]
 - blacksmith-8vcpu-ubuntu-2404-arm  # [linux and aarch64]
 - blacksmith-6vcpu-macos-latest  # [osx]
-- blacksmith-8vcpu-windows-2025  # [win]
+- namespace-profile-8cpu-on-win-64  # [win]

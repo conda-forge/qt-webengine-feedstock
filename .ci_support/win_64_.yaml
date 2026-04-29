@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2022
 github_actions_labels:
-- blacksmith-8vcpu-windows-2025
+- namespace-profile-8cpu-on-win-64
 glib:
 - '2'
 libevent:
