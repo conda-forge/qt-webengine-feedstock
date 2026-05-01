@@ -1,0 +1,30 @@
+diff --git a/chromium/v8/src/wasm/wasm-objects.cc b/chromium/v8/src/wasm/wasm-objects.cc
+index ef4c0aa18e1..51a31b63fdb 100644
+--- a/src/3rdparty//chromium/v8/src/wasm/wasm-objects.cc
++++ b/src/3rdparty//chromium/v8/src/wasm/wasm-objects.cc
+@@ -56,6 +56,25 @@
+     if (false) PrintF(__VA_ARGS__); \
+   } while (false)
+ 
++#if V8_TARGET_OS_LINUX
++#ifndef MFD_CLOEXEC
++#define MFD_CLOEXEC 0x0001U
++#endif
++#ifndef __NR_memfd_create
++#if defined(__aarch64__)
++#define __NR_memfd_create 279
++#elif defined(__powerpc64__)
++#define __NR_memfd_create 360
++#elif defined(__x86_64__)
++#define __NR_memfd_create 319
++#endif
++#endif
++static int memfd_create(const char *name, unsigned int flags)
++{
++  return syscall(__NR_memfd_create, name, flags);
++}
++#endif
++
+ namespace v8 {
+ namespace internal {
+ 

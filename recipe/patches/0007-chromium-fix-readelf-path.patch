@@ -1,0 +1,26 @@
+From 4bb37f8d04a3e003c3d93cca6199548e5e6da924 Mon Sep 17 00:00:00 2001
+From: Rafael Martins <rmartins@anaconda.com>
+Date: Thu, 18 Jul 2024 03:37:03 +0200
+Subject: [PATCH 8/8] chromium: fix readelf path
+
+---
+ src/3rdparty/chromium/build/toolchain/gcc_toolchain.gni | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/3rdparty/chromium/build/toolchain/gcc_toolchain.gni b/src/3rdparty/chromium/build/toolchain/gcc_toolchain.gni
+index 182bedd10..93bc9ed59 100644
+--- a/src/3rdparty/chromium/build/toolchain/gcc_toolchain.gni
++++ b/src/3rdparty/chromium/build/toolchain/gcc_toolchain.gni
+@@ -500,6 +500,9 @@ template("single_gcc_toolchain") {
+         # (skipped on Aix)
+         solink_extra_flags = "--partitioned-library"
+       }
++      if (current_os == "linux") {
++        readelf = getenv("BUILD_PREFIX") + "/" + getenv("HOST") + "/bin/readelf"
++      }
+       command = "\"$python_path\" \"$solink_wrapper\" --readelf=\"$readelf\" --nm=\"$nm\" $strip_switch$dwp_switch --sofile=\"$unstripped_sofile\" --tocfile=\"$tocfile\"$map_switch --output=\"$sofile\" -- $link_command $solink_extra_flags"
+ 
+       if (target_cpu == "mipsel" && is_component_build && is_android) {
+-- 
+2.39.2 (Apple Git-143)
+

@@ -1,0 +1,53 @@
+From b0bef843301bf1093b2c817c9e55b5cd58435526 Mon Sep 17 00:00:00 2001
+From: Andrii Osipov <aosipov@anaconda.com>
+Date: Tue, 27 Jan 2026 03:49:26 -0800
+Subject: [PATCH] Disable ScreenCaptureKit on OSX
+
+---
+ src/3rdparty/chromium/content/browser/BUILD.gn                  | 2 ++
+ .../browser/media/capture/native_screen_capture_picker_mac.mm   | 2 +-
+ src/3rdparty/chromium/media/media_options.gni                   | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/3rdparty/chromium/content/browser/BUILD.gn b/src/3rdparty/chromium/content/browser/BUILD.gn
+index 549fb4bed1..c76cb23b44 100644
+--- a/src/3rdparty/chromium/content/browser/BUILD.gn
++++ b/src/3rdparty/chromium/content/browser/BUILD.gn
+@@ -2949,6 +2949,8 @@ jumbo_source_set("browser") {
+         sources -= [
+           "media/capture/screen_capture_kit_device_mac.h",
+           "media/capture/screen_capture_kit_device_mac.mm",
++          "media/capture/screen_capture_kit_device_utils_mac.h",
++          "media/capture/screen_capture_kit_device_utils_mac.mm",
+           "media/capture/screen_capture_kit_fullscreen_module.h",
+           "media/capture/screen_capture_kit_fullscreen_module.mm",
+         ]
+diff --git a/src/3rdparty/chromium/content/browser/media/capture/native_screen_capture_picker_mac.mm b/src/3rdparty/chromium/content/browser/media/capture/native_screen_capture_picker_mac.mm
+index a75a3a44a2..4b7143b350 100644
+--- a/src/3rdparty/chromium/content/browser/media/capture/native_screen_capture_picker_mac.mm
++++ b/src/3rdparty/chromium/content/browser/media/capture/native_screen_capture_picker_mac.mm
+@@ -222,7 +222,7 @@ void Open(DesktopMediaID::Type type,
+     cached_content_filters_[source_id] = filter;
+   }
+ 
+-  return CreateScreenCaptureKitDeviceMac(source, filter);
++  return nullptr;
+ }
+ 
+ void NativeScreenCapturePickerMac::ScheduleCleanup(DesktopMediaID::Id id) {
+diff --git a/src/3rdparty/chromium/media/media_options.gni b/src/3rdparty/chromium/media/media_options.gni
+index a459251070..020f5fee60 100644
+--- a/src/3rdparty/chromium/media/media_options.gni
++++ b/src/3rdparty/chromium/media/media_options.gni
+@@ -142,7 +142,7 @@ declare_args() {
+ 
+   # Enable the use of ScreenCaptureKit framework on macOS. A stable ScreenCaptureKit is available
+   # from macOS 13.2. Enabled by default for all build.
+-  use_sck = true
++  use_sck = false
+ }
+ 
+ # Use another declare_args() to allow dependence on args defined above.
+-- 
+2.39.3 (Apple Git-146)
+

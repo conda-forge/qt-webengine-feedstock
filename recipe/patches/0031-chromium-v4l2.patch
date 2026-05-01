@@ -1,0 +1,26 @@
+diff --git a/chromium/media/capture/video/linux/v4l2_capture_delegate.cc b/chromium/media/capture/video/linux/v4l2_capture_delegate.cc
+index 360b7ccb7be..5faf37284fc 100644
+--- a/src/3rdparty/chromium/media/capture/video/linux/v4l2_capture_delegate.cc
++++ b/src/3rdparty/chromium/media/capture/video/linux/v4l2_capture_delegate.cc
+@@ -1226,7 +1226,7 @@ void V4L2CaptureDelegate::SetErrorState(VideoCaptureError error,
+   client_->OnError(error, from_here, reason);
+ }
+ 
+-#if BUILDFLAG(IS_LINUX)
++#if 0
+ gfx::ColorSpace V4L2CaptureDelegate::BuildColorSpaceFromv4l2() {
+   v4l2_colorspace v4l2_primary = (v4l2_colorspace)video_fmt_.fmt.pix.colorspace;
+   v4l2_quantization v4l2_range =
+diff --git a/chromium/media/capture/video/linux/v4l2_capture_delegate.h b/chromium/media/capture/video/linux/v4l2_capture_delegate.h
+index 0c2438859ff..6271e866451 100644
+--- a/src/3rdparty/chromium/media/capture/video/linux/v4l2_capture_delegate.h
++++ b/src/3rdparty/chromium/media/capture/video/linux/v4l2_capture_delegate.h
+@@ -129,7 +129,7 @@ class CAPTURE_EXPORT V4L2CaptureDelegate final {
+                      const base::Location& from_here,
+                      const std::string& reason);
+ 
+-#if BUILDFLAG(IS_LINUX)
++#if 0
+   // Systems which describe a "color space" usually map that to one or more of
+   // {primary, matrix, transfer, range}. BuildColorSpaceFromv4l2() will use the
+   // matched value as first priority. Otherwise, if there is no best matching

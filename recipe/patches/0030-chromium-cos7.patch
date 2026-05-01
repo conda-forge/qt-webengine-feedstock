@@ -1,0 +1,90 @@
+diff --git a/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc b/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
+index 0040a037f34..9fecb3e5fd7 100644
+--- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
++++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
+@@ -37,6 +37,25 @@
+ #include <sys/mman.h>
+ #endif
+ 
++#if PA_BUILDFLAG(IS_LINUX)
++#ifndef MFD_CLOEXEC
++#define MFD_CLOEXEC 0x0001U
++#endif
++#ifndef __NR_memfd_create
++#if defined(__aarch64__)
++#define __NR_memfd_create 279
++#elif defined(__powerpc64__)
++#define __NR_memfd_create 360
++#elif defined(__x86_64__)
++#define __NR_memfd_create 319
++#endif
++#endif
++static int memfd_create(const char *name, unsigned int flags)
++{
++  return syscall(__NR_memfd_create, name, flags);
++}
++#endif
++
+ namespace partition_alloc::internal {
+ 
+ #if PA_BUILDFLAG(HAS_64_BIT_POINTERS)
+diff --git a/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc b/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
+index a025fd2dc43..1f61ca54b4f 100644
+--- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
++++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
+@@ -51,6 +51,25 @@
+ #endif  // PA_CONFIG(ENABLE_SHADOW_METADATA)
+ #endif  // PA_BUILDFLAG(IS_LINUX) || PA_BUILDFLAG(IS_CHROMEOS)
+ 
++#if PA_BUILDFLAG(IS_LINUX)
++#ifndef MFD_CLOEXEC
++#define MFD_CLOEXEC 0x0001U
++#endif
++#ifndef __NR_memfd_create
++#if defined(__aarch64__)
++#define __NR_memfd_create 279
++#elif defined(__powerpc64__)
++#define __NR_memfd_create 360
++#elif defined(__x86_64__)
++#define __NR_memfd_create 319
++#endif
++#endif
++static int memfd_create(const char *name, unsigned int flags)
++{
++  return syscall(__NR_memfd_create, name, flags);
++}
++#endif
++
+ namespace partition_alloc::internal {
+ 
+ #if PA_BUILDFLAG(RECORD_ALLOC_INFO)
+diff --git a/chromium/mojo/core/channel_linux.cc b/chromium/mojo/core/channel_linux.cc
+index dd5edfce80e..08a3372066c 100644
+--- a/src/3rdparty/chromium/mojo/core/channel_linux.cc
++++ b/src/3rdparty/chromium/mojo/core/channel_linux.cc
+@@ -55,6 +55,25 @@
+ #define EFD_ZERO_ON_WAKE O_NOFOLLOW
+ #endif
+ 
++#ifndef F_SEAL_SEAL
++#define F_SEAL_SEAL   0x0001
++#endif
++#ifndef F_SEAL_SHRINK
++#define F_SEAL_SHRINK 0x0002
++#endif
++#ifndef F_SEAL_GROW
++#define F_SEAL_GROW   0x0004
++#endif
++#ifndef F_SEAL_WRITE
++#define F_SEAL_WRITE  0x0008
++#endif
++#ifndef F_ADD_SEALS
++#define F_ADD_SEALS 1033
++#endif
++#ifndef F_GET_SEALS
++#define F_GET_SEALS 1034
++#endif
++
+ namespace mojo {
+ namespace core {
+ 

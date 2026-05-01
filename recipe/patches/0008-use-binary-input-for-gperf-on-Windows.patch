@@ -1,0 +1,26 @@
+From 0e0521ac8424532619f6a89be8d9826ebcdfded5 Mon Sep 17 00:00:00 2001
+From: Brian Wing <bwing@anaconda.com>
+Date: Wed, 4 Dec 2024 14:51:33 -0500
+Subject: [PATCH] Use binary input for gperf on Windows
+
+---
+ src/3rdparty/chromium/third_party/blink/renderer/build/scripts/gperf.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/gperf.py b/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/gperf.py
+index 42630d37c5d..f303d0d8b9d 100644
+--- a/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/gperf.py
++++ b/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/gperf.py
+@@ -26,8 +26,8 @@ def generate_gperf(gperf_path, gperf_input, gperf_args):
+             cmd,
+             stdin=subprocess.PIPE,
+             stdout=subprocess.PIPE,
+-            universal_newlines=True)
+-        gperf_output = gperf.communicate(gperf_input)[0]
++            universal_newlines=False)
++        gperf_output = gperf.communicate(gperf_input.encode())[0].decode()
+         # Massage gperf output to be more palatable for modern compilers.
+         # TODO(thakis): Upstream these to gperf so we don't need massaging.
+         # `register` is deprecated in C++11 and removed in C++17, so remove
+-- 
+2.45.2

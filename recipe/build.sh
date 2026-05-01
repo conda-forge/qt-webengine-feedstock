@@ -1,145 +1,171 @@
-#! /usr/bin/env bash
+#!/bin/sh
 
-set -xeuo pipefail
+set -ex
 
-syncqt.pl -version ${PKG_VERSION}
+if [[ "${target_platform}" == linux-* ]]; then
+  CMAKE_ARGS="
+    ${CMAKE_ARGS}
+    -DQT_FEATURE_webengine_ozone_x11=ON
+    -DQT_FEATURE_webengine_system_alsa=ON
+  "
 
-mkdir qtwebengine-build
-pushd qtwebengine-build
+  if [[ "${target_platform}" == linux-aarch64 ]]; then
+    # Webenginedriver is just used for tests and does not link against vendored zlib correctly.
+    #
+    # Chromium vendors minigbm, a discontinued Intel project, which uses compiler features not compatible with our
+    # aarch64 gcc compiler.
+    CMAKE_ARGS="
+      ${CMAKE_ARGS}
+      -DQT_FEATURE_webengine_system_gbm=ON
+      -DQT_FEATURE_webenginedriver=OFF
+    "
+  else
+    CMAKE_ARGS="
+      ${CMAKE_ARGS}
+      -DQT_FEATURE_webengine_system_gbm=OFF
+    "
+  fi
 
-USED_BUILD_PREFIX=${BUILD_PREFIX:-${PREFIX}}
-echo USED_BUILD_PREFIX=${BUILD_PREFIX}
-
-# qtwebengine needs python 2
-if [[ $(uname) == "Darwin" && $(arch) == "arm64" ]]; then
-    export PATH="$(pyenv root)/shims:${PATH}"
+  # Hack to help the generator executables, such as `v8_context_snapshot_generator`, that get called during a build
+  # find unvendored libraries in our host prefix.
+  export LD_LIBRARY_PATH="${PREFIX}/lib:${LD_LIBRARY_PATH}"
 else
-    mamba create --yes --prefix "${SRC_DIR}/python2_hack" --channel conda-forge --no-deps python=2
-    export PATH=${SRC_DIR}/python2_hack/bin:${PATH}
+  export OSX_SDK_DIR=`dirname ${CONDA_BUILD_SYSROOT}`
+  MACOSX_SDK_VERSION=${CONDA_BUILD_SYSROOT##*MacOSX}
+  MACOSX_SDK_VERSION=${MACOSX_SDK_VERSION%%.sdk*}
+  echo ${MACOSX_SDK_VERSION}
+
+  # Make sure the PBP graph includes env vars we're using in patches.
+  echo ${OSX_SDK_DIR}
+
+  # Webenginedriver is just used for tests and does not link against vendored zlib correctly.
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_NO_APPLE_SDK_AND_XCODE_CHECK=ON"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_FORCE_WARN_APPLE_SDK_AND_XCODE_CHECK=ON"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_APPLE_SDK_PATH=${CONDA_BUILD_SYSROOT}"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_MAC_SDK_VERSION=${MACOSX_SDK_VERSION}"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_FEATURE_webenginedriver=OFF"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_FEATURE_webengine_system_gbm=OFF"
+  CMAKE_ARGS="${CMAKE_ARGS} -DQT_FEATURE_webengine_system_ssl=OFF"
+
+  # protobuf python wrapper scripts expects bare libtool and strip commands
+  if ! test -f $BUILD_PREFIX/bin/libtool
+  then
+    ln -sv $BUILD_PREFIX/bin/${LIBTOOL} $BUILD_PREFIX/bin/libtool
+  fi
+  if ! test -f $BUILD_PREFIX/bin/strip
+  then
+    ln -sv $BUILD_PREFIX/bin/${STRIP} $BUILD_PREFIX/bin/strip
+  fi
+  if ! test -f $BUILD_PREFIX/bin/otool
+  then
+    ln -sv $BUILD_PREFIX/bin/${OTOOL} $BUILD_PREFIX/bin/otool
+  fi
+  if ! test -f $BUILD_PREFIX/bin/nm
+  then
+    ln -sv $BUILD_PREFIX/bin/${NM} $BUILD_PREFIX/bin/nm
+  fi
+
+  # gn_run_binary.py nasm: Library not loaded: @rpath/libc++.1.dylib
+  export DYLD_FALLBACK_LIBRARY_PATH=${PREFIX}/lib
 fi
+CMAKE_ARGS="${CMAKE_ARGS} -DPKG_CONFIG_EXECUTABLE=$BUILD_PREFIX/bin/pkg-config"
 
-if [[ $(uname) == "Linux" ]]; then
-    ln -s ${GXX} g++ || true
-    ln -s ${GCC} gcc || true
-    ln -s ${USED_BUILD_PREFIX}/bin/${HOST}-gcc-ar gcc-ar || true
+CMAKE_ARGS="${CMAKE_ARGS} -DQT_HOST_PATH=${PREFIX}"
 
-    export LD=${GXX}
-    export CC=${GCC}
-    export CXX=${GXX}
+CMAKE_ARGS="${CMAKE_ARGS} -DFEATURE_webengine_spellchecker=OFF"
 
-    chmod +x g++ gcc gcc-ar
-    export PATH=$PREFIX/bin:${PWD}:${PATH}
+# IMPORTANT: Chromium didn't add flags to unvendor protobuf until very recently and not even the latest Qt 6.9.1
+# release has them included yet. We can't fix it until we upgrade Qt versions to maybe 6.10. That is the reason why
+# we're removing these headers and we should be able to stop as soon as Chromium provides a build option to
+# use_system_protobuf=1.
+#
+# We can't add ${PREFIX}/include to the include paths because our protobuf, unicode, openssl, abseil, zlib, and jpeg
+# packages are both lib and development packages and the included headers will get used instead of the vendored ones.
+# To resolve this, we remove the conda ones to avoid conflicts but really these should be split into devel and lib
+# packages so the unwanted headers are never even installed.
+rm -rf ${PREFIX}/include/google/protobuf
+rm -rf ${PREFIX}/include/unicode
+rm -rf ${PREFIX}/include/openssl
+rm -rf ${PREFIX}/include/absl
+rm -rf ${PREFIX}/include/vulkan
+# rm -rf ${PREFIX}/include/zlib.h
+# rm -rf ${PREFIX}/include/zconf.h
+# rm -rf ${PREFIX}/include/jconfig.h
+# rm -rf ${PREFIX}/include/jerror.h
+# rm -rf ${PREFIX}/include/jmorecfg.h
+# rm -rf ${PREFIX}/include/jpeglib.h
 
-    which pkg-config
-    export PKG_CONFIG_EXECUTABLE=$(which pkg-config)
-    export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig/:$BUILD_PREFIX/lib/pkgconfig/
+# QT_FEATURE_webengine_system_icu has to be OFF or else icudtl.dat doesn't get installed
+# https://github.com/qt/qtwebengine/blob/6.9.1/src/core/api/CMakeLists.txt#L186
+#
+# Need at least ffmpeg v7.0 to unvendor on Unix.
+# Need at least libpng v1.6.43 to unvendor on Unix.
+# Need at least zlib v1.3.0 to unvendor on Unix.
+#
+# Both minizip and zlib have to be ON to use system minizip.
+cmake --log-level STATUS -S . -Bbuild -GNinja ${CMAKE_ARGS} \
+  -DCMAKE_PREFIX_PATH=${PREFIX} \
+  -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+  -DCMAKE_INSTALL_RPATH=${PREFIX}/lib \
+  -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+  -DCMAKE_FIND_FRAMEWORK=LAST \
+  -DBUILD_WITH_PCH=OFF \
+  -DINSTALL_BINDIR=lib/qt6/bin \
+  -DINSTALL_PUBLICBINDIR=bin \
+  -DINSTALL_LIBEXECDIR=lib/qt6 \
+  -DINSTALL_DOCDIR=share/doc/qt6 \
+  -DINSTALL_ARCHDATADIR=lib/qt6 \
+  -DINSTALL_DATADIR=share/qt6 \
+  -DINSTALL_INCLUDEDIR=include/qt6 \
+  -DINSTALL_MKSPECSDIR=lib/qt6/mkspecs \
+  -DINSTALL_EXAMPLESDIR=share/doc/qt6/examples \
+  -DQT_FEATURE_qtpdf_build=ON \
+  -DQT_FEATURE_qtpdf_quick_build=ON \
+  -DQT_FEATURE_qtpdf_widgets_build=ON \
+  -DQT_FEATURE_qtwebengine_build=ON \
+  -DQT_FEATURE_qtwebengine_core_build=ON \
+  -DQT_FEATURE_qtwebengine_quick_build=ON \
+  -DQT_FEATURE_qtwebengine_widgets_build=ON \
+  -DQT_FEATURE_webengine_jumbo_build=OFF \
+  -DQT_FEATURE_webengine_pepper_plugins=ON \
+  -DQT_FEATURE_webengine_printing_and_pdf=ON \
+  -DQT_FEATURE_webengine_qt_freetype=OFF \
+  -DQT_FEATURE_webengine_qt_libjpeg=OFF \
+  -DQT_FEATURE_webengine_qt_libpng=ON \
+  -DQT_FEATURE_webengine_qt_zlib=ON \
+  -DQT_FEATURE_webengine_system_ffmpeg=OFF \
+  -DQT_FEATURE_webengine_system_freetype=ON \
+  -DQT_FEATURE_webengine_system_glib=ON \
+  -DQT_FEATURE_webengine_system_harfbuzz=ON \
+  -DQT_FEATURE_webengine_system_icu=OFF \
+  -DQT_FEATURE_webengine_system_libevent=ON \
+  -DQT_FEATURE_webengine_system_libjpeg=ON \
+  -DQT_FEATURE_webengine_system_libopenjpeg2=ON \
+  -DQT_FEATURE_webengine_system_libpci=OFF \
+  -DQT_FEATURE_webengine_system_libpng=ON \
+  -DQT_FEATURE_webengine_system_libtiff=ON \
+  -DQT_FEATURE_webengine_system_libvpx=ON \
+  -DQT_FEATURE_webengine_system_libwebp=ON \
+  -DQT_FEATURE_webengine_system_libxml=ON \
+  -DQT_FEATURE_webengine_system_libxslt=ON \
+  -DQT_FEATURE_webengine_system_minizip=ON \
+  -DQT_FEATURE_webengine_system_opus=ON \
+  -DQT_FEATURE_webengine_system_re2=ON \
+  -DQT_FEATURE_webengine_system_snappy=ON \
+  -DQT_FEATURE_webengine_system_zlib=ON
 
-    # Set QMake prefix to $PREFIX
-    qmake -set prefix $PREFIX
+cmake --build build --target install --config Release -j${CPU_COUNT}
 
-    qmake QMAKE_LIBDIR=${PREFIX}/lib \
-        QMAKE_LFLAGS+="-Wl,-rpath,$PREFIX/lib -Wl,-rpath-link,$PREFIX/lib -L$PREFIX/lib" \
-        INCLUDEPATH+="${PREFIX}/include" \
-        PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
-        ..
+pushd "${PREFIX}"
 
-    # Cleanup before final version
-    # https://github.com/conda-forge/qt-webengine-feedstock/pull/15#issuecomment-1336593298
-    pushd "${PREFIX}/lib"
-    for f in *.prl; do
-        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f};
-    done
-    popd
+mkdir -p bin
 
-    pushd "${PREFIX}/mkspecs"
-    for f in *.pri; do
-        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
-    done
-    popd
-
-    pushd
-    cd "${PREFIX}/mkspecs/modules"
-    for f in *.pri; do
-        sed -i "s,\$.CONDA_BUILD_SYSROOT),${CONDA_BUILD_SYSROOT},g" ${f}
-    done
-    popd
-
-    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j$CPU_COUNT \
-        | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
-        | sed "s,^g++.*-o,g++ [...] -o," || true
-    #           ^    use a comma instead of a / to avoid escape sequences
-
-    # Parallel making will ultimately fail, so we do it to retain somewhat
-    # reasonable build times, but fall back to a single-threaded make to finish
-    # the job.
-    CPATH=$PREFIX/include:$BUILD_PREFIX/src/core/api make -j1 \
-        | sed "s,.SRC_DIR/qtwebengine-build/g++,g++," \
-        | sed "s,^g++.*-o,g++ [...] -o,"
-    #           ^    use a comma instead of a / to avoid escape sequences
-
-    make install
+if [[ -f "${SRC_DIR}"/build/user_facing_tool_links.txt ]]; then
+  for links in "${SRC_DIR}"/build/user_facing_tool_links.txt; do
+    while read _line; do
+      if [[ -n "${_line}" ]]; then
+        ln -sf ${_line}
+      fi
+    done < ${links}
+  done
 fi
-
-if [[ $(uname) == "Darwin" ]]; then
-    # Let Qt set its own flags and vars
-    unset OSX_ARCH CFLAGS CXXFLAGS LDFLAGS
-
-    # Qt passes clang flags to LD (e.g. -stdlib=c++)
-    export LD=${CXX}
-
-    # Use xcode-avoidance scripts provided by qt-main so that the build can
-    # run with just the command-line tools, and not full XCode, installed.
-    export PATH=$PREFIX/bin/xc-avoidance:$PATH
-
-    # However, the Chromium build process uses absolute paths to the macOS
-    # build configuration tools (e.g., `/usr/bin/xcodebuild`), so the xcode-avoidance
-    # scripts don't work for that piece of the build. Instead we need
-    # to patch the build configuration to make sure that it builds against the
-    # desired SDK, so that the binary rpaths are correct.
-    pushd ../src/3rdparty/chromium/build/config/mac
-    awk 'NR==77{$0="    rebase_path(\"'$CONDA_BUILD_SYSROOT'\", root_build_dir),"}1' BUILD.gn >BUILD.gn.tmp
-    mv -f BUILD.gn.tmp BUILD.gn
-    popd
-
-    export APPLICATION_EXTENSION_API_ONLY=NO
-
-    EXTRA_FLAGS=""
-    if [[ $(arch) == "arm64" ]]; then
-      EXTRA_FLAGS="QMAKE_APPLE_DEVICE_ARCHS=arm64"
-    fi
-
-    if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
-      # The python2_hack does not know about _sysconfigdata_arm64_apple_darwin20_0_0, so unset the data name
-      unset _CONDA_PYTHON_SYSCONFIGDATA_NAME
-    fi
-
-    # Set QMake prefix to $PREFIX
-    qmake -set prefix $PREFIX
-
-    # sed -i '' -e 's/-Werror//' $PREFIX/mkspecs/features/qt_module_headers.prf
-
-    qmake QMAKE_LIBDIR=${PREFIX}/lib \
-        INCLUDEPATH+="${PREFIX}/include" \
-        CONFIG+="warn_off" \
-        QMAKE_CFLAGS_WARN_ON="-w" \
-        QMAKE_CXXFLAGS_WARN_ON="-w" \
-        QMAKE_CFLAGS+="-Wno-everything" \
-        QMAKE_CXXFLAGS+="-Wno-everything" \
-        $EXTRA_FLAGS \
-        QMAKE_LFLAGS+="-Wno-everything -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib" \
-        PKG_CONFIG_EXECUTABLE=$(which pkg-config) \
-        ..
-
-    # find . -type f -exec sed -i '' -e 's/-Wl,-fatal_warnings//g' {} +
-    # sed -i '' -e 's/-Werror//' $PREFIX/mkspecs/features/qt_module_headers.prf
-
-    make -j$CPU_COUNT
-    make install
-fi
-
-# Post build setup
-# ----------------
-# Remove static libraries that are not part of the Qt SDK.
-pushd "${PREFIX}"/lib > /dev/null
-    find . -name "*.a" -and -not -name "libQt*" -exec rm -f {} \;
-popd > /dev/null

@@ -27,19 +27,19 @@ fontconfig:
 freetype:
 - '2'
 github_actions_labels:
-- cirun-openstack-cpu-xlarge
+- blacksmith-16vcpu-ubuntu-2404
+glib:
+- '2'
+lcms2:
+- '2'
 libevent:
 - 2.1.12
-libiconv:
-- '1'
-libjpeg_turbo:
-- '3'
 libpng:
 - '1.6'
-libsqlite:
-- '3'
-libwebp:
-- '1'
+libtiff:
+- '4.7'
+libudev:
+- '257'
 libxcb:
 - '1'
 libxml2_devel:
@@ -48,10 +48,14 @@ nspr:
 - '4'
 nss:
 - '3'
-pulseaudio_client:
-- '17.0'
-qt:
-- '5.15'
+openjpeg:
+- '2'
+perl:
+- 5.32.1
+re2:
+- 2025.11.05
+snappy:
+- '1.2'
 target_platform:
 - linux-64
 zip_keys:
