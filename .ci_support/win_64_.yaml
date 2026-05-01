@@ -9,7 +9,7 @@ channel_targets:
 cxx_compiler:
 - vs2022
 github_actions_labels:
-- namespace-profile-8cpu-on-win-64
+- namespace-profile-16cpu-on-win-64
 glib:
 - '2'
 libevent:

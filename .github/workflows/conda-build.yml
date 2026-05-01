@@ -26,7 +26,7 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['blacksmith-8vcpu-ubuntu-2404']
+            runs_on: ['blacksmith-16vcpu-ubuntu-2404']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
           - CONFIG: osx_arm64_
             STORE_BUILD_ARTIFACTS: False
@@ -37,7 +37,7 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['namespace-profile-8cpu-on-win-64']
+            runs_on: ['namespace-profile-16cpu-on-win-64']
     steps:
 
     - name: Checkout code
