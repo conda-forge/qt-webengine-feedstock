@@ -7,9 +7,9 @@ This ensures that binaries that get run during the build process
 can find the unvendored libs they need.
 
 ---
- cmake/QtToolchainHelpers.cmake                                 | 41 +++++++++++++++++++++--------------------
+ cmake/QtToolchainHelpers.cmake                                 | 42 ++++++++++---------
  src/3rdparty/chromium/build/config/clang/BUILD.gn              |  6 ++++++
- src/3rdparty/chromium/build/mac/find_sdk.py                    | 15 ++++++++++-----
+ src/3rdparty/chromium/build/mac/find_sdk.py                    | 15 ++++---
  .../spoof_checks/top_domains/BUILD.gn                          |  4 ++++
  src/3rdparty/chromium/net/tools/root_store_tool/BUILD.gn       |  4 ++++
  .../transport_security_state_generator/BUILD.gn                |  4 ++++
@@ -20,17 +20,17 @@ can find the unvendored libs they need.
  .../perfetto/src/ipc/protoc_plugin/BUILD.gn                    |  4 ++++
  .../perfetto/src/protozero/protoc_plugin/BUILD.gn              |  8 ++++++++
  src/3rdparty/chromium/third_party/protobuf-javascript/BUILD.gn |  4 ++++
- src/3rdparty/chromium/third_party/protobuf/BUILD.gn            |  5 +++++
+ .../chromium/third_party/protobuf/BUILD.gn                     |  7 ++++
  src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn       |  8 ++++++++
  src/3rdparty/chromium/v8/BUILD.gn                              |  5 +++++
  16 files changed, 96 insertions(+), 27 deletions(-)
 
 diff --git a/cmake/QtToolchainHelpers.cmake b/cmake/QtToolchainHelpers.cmake
-index eaa3a43..4a1a1bb 100644
+index 2518830485..58a161ca61 100644
 --- a/cmake/QtToolchainHelpers.cmake
 +++ b/cmake/QtToolchainHelpers.cmake
-@@ -3,26 +3,26 @@
-
+@@ -3,26 +3,27 @@
+ 
  function(get_darwin_sdk_version result)
      if(APPLE)
 -        if(IOS)
@@ -72,18 +72,19 @@ index eaa3a43..4a1a1bb 100644
 +#                    "Can't determine darwin ${sdk_name} SDK version. Error: ${xcrun_error}")
 +#        endif()
 +#        string(STRIP "${sdk_version}" sdk_version)
++#        set(${result} "${sdk_version}" PARENT_SCOPE)
 +        set(${result} "$ENV{OSX_SDK_VER}" PARENT_SCOPE)
      endif()
  endfunction()
-
-@@ -384,6 +384,7 @@ macro(append_compiler_linker_sdk_setup)
-                 use_system_xcode=true
+ 
+@@ -407,6 +408,7 @@ macro(append_compiler_linker_sdk_setup)
+                 enable_stripping=false
                  mac_deployment_target="${CMAKE_OSX_DEPLOYMENT_TARGET}"
                  mac_sdk_min="${macSdkVersion}"
 +                mac_sdk_path="${CMAKE_OSX_SYSROOT}"
                  use_libcxx=true
+                 use_llvm_libatomic=false
              )
-             _qt_internal_get_apple_sdk_version(apple_sdk_version)
 diff --git a/src/3rdparty/chromium/build/config/clang/BUILD.gn b/src/3rdparty/chromium/build/config/clang/BUILD.gn
 index 9b8719a64ba7..dbe5efc5c235 100644
 --- a/src/3rdparty/chromium/build/config/clang/BUILD.gn
@@ -99,10 +100,10 @@ index 9b8719a64ba7..dbe5efc5c235 100644
 +  }
 +}
 diff --git a/src/3rdparty/chromium/build/mac/find_sdk.py b/src/3rdparty/chromium/build/mac/find_sdk.py
-index 3dcc4d5d36bf..6457d57d358a 100755
+index c83a3d1151..20285a1f1f 100755
 --- a/src/3rdparty/chromium/build/mac/find_sdk.py
 +++ b/src/3rdparty/chromium/build/mac/find_sdk.py
-@@ -69,14 +69,15 @@ def main():
+@@ -69,15 +69,16 @@ def main():
      print(err, file=sys.stderr)
      raise Exception('Error %d running xcode-select' % job.returncode)
    dev_dir = out.decode('UTF-8').rstrip()
@@ -116,12 +117,13 @@ index 3dcc4d5d36bf..6457d57d358a 100755
      raise SdkError('Install Xcode, launch it, accept the license ' +
        'agreement, and run `sudo xcode-select -s /path/to/Xcode.app` ' +
        'to continue.')
--  sdks = [re.findall('^MacOSX(\d+\.\d+)\.sdk$', s) for s in os.listdir(sdk_dir)]
+   sdk_dir_list = os.listdir(sdk_dir)
+-  sdks = [re.findall('^MacOSX(\d+\.\d+)\.sdk$', s) for s in sdk_dir_list]
 +  sdks = [re.findall(r'^MacOSX(\d+\.\d+)\.sdk$', s) for s in os.listdir(sdk_dir)]
    sdks = [s[0] for s in sdks if s]  # [['10.5'], ['10.6']] => ['10.5', '10.6']
    sdks = [s for s in sdks  # ['10.5', '10.6'] => ['10.6']
            if parse_version(s) >= parse_version(min_sdk_version)]
-@@ -90,8 +91,12 @@ def main():
+@@ -92,8 +93,12 @@ def main():
      print(sdk_path)
  
    if options.print_bin_path:
@@ -297,19 +299,21 @@ index 552cb4111510..1f91de9afee8 100644
        "src/generator/js_generator.cc",
        "src/generator/js_generator.h",
 diff --git a/src/3rdparty/chromium/third_party/protobuf/BUILD.gn b/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
-index bb9ef86c0edb..addba7573ccb 100644
+index 612e57b8d8..9843dcb377 100644
 --- a/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
 +++ b/src/3rdparty/chromium/third_party/protobuf/BUILD.gn
-@@ -301,6 +301,11 @@ if (current_toolchain == host_toolchain) {
+@@ -301,6 +301,13 @@ if (current_toolchain == host_toolchain) {
+ 
      configs -= [ "//build/config/compiler:chromium_code" ]
      configs += [ "//build/config/compiler:no_chromium_code" ]
- 
++
 +    if (is_mac && !is_component_build) {
 +      # Set rpath to find shared libs in a non-component build.
 +      configs += [ "//build/config/clang:rpath_for_built_shared_libraries" ]
 +    }
 +
-     cflags = protobuf_lite_cflags
++
+     configs += [ ":protobuf_config_internal" ]
  
      deps = [
 diff --git a/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn b/src/3rdparty/chromium/tools/v8_context_snapshot/BUILD.gn

@@ -1,0 +1,41 @@
+From af9040fd8beb95070a21531f8a647e1d2296735a Mon Sep 17 00:00:00 2001
+From: Andrii Osipov <aosipov@anaconda.com>
+Date: Mon, 30 Mar 2026 03:02:20 -0700
+Subject: [PATCH] V8 SegmentedTable: 64KB segments on Linux aarch64
+
+Upstream uses 16KB segments + segment pool on most 64-bit Unix hosts.
+Linux aarch64 often runs with 64KB kernel pages; keeping segment size at
+64KB matches page granularity and matches the conservative path used
+for PPC64 / Windows.
+
+---
+ .../chromium/v8/src/common/segmented-table.h         | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/3rdparty/chromium/v8/src/common/segmented-table.h b/src/3rdparty/chromium/v8/src/common/segmented-table.h
+index b0e31c432d..0aec879d13 100644
+--- a/src/3rdparty/chromium/v8/src/common/segmented-table.h
++++ b/src/3rdparty/chromium/v8/src/common/segmented-table.h
+@@ -41,10 +41,14 @@ class V8_EXPORT_PRIVATE SegmentedTable {
+   static constexpr bool kUseContiguousMemory = true;
+   static constexpr size_t kReservationSize = size;
+   static constexpr size_t kMaxCapacity = kReservationSize / kEntrySize;
+-#if defined(V8_TARGET_OS_WIN) || defined(V8_HOST_ARCH_PPC64)
+-  // On windows the allocation granularity is 64KB and thus we cannot make a
+-  // segment smaller than that.
+-  // PPC64 can utilize a 64KB page size.
++#if defined(V8_TARGET_OS_WIN) || defined(V8_HOST_ARCH_PPC64) ||           \
++    (defined(V8_TARGET_OS_LINUX) && defined(V8_TARGET_ARCH_ARM64))
++  // Windows: allocation granularity is 64KB; segments cannot be smaller.
++  // PPC64: 64KB page size is common; segment size should match page granularity.
++  // Linux aarch64: many kernels use 4KB or 64KB pages; 64KB segments align
++  // with the large-page case and avoid relying on the 16KB segment pool path
++  // that can misbehave when host page size and segment assumptions disagree.
++  // Use kUseSegmentPool=false like the other 64KB-segment platforms.
+   static constexpr bool kUseSegmentPool = false;
+   static constexpr size_t kSegmentSize = 64 * KB;
+ #else
+-- 
+2.39.3 (Apple Git-146)
+
+

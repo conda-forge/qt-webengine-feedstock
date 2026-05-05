@@ -1,5 +1,5 @@
 context:
-  version: "6.10.2"
+  version: "6.11.0"
   maj_min: ${{ (version | split('.'))[:2] | join('.') }}
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://download.qt.io/official_releases/qt/${{ maj_min }}/${{ version }}/submodules/qtwebengine-everywhere-src-${{ version }}.tar.xz
-  md5: cab991d3174f9039b94b46fd98b0cee1
+  md5: ee64c0d6e35df14a8164a5a4ede2777e
   patches:
     - patches/0001-chromium-add-conda-CDT-include-paths-to-include_dirs.patch
     - patches/0002-add-system-lib-options-to-cmake-files.patch
@@ -23,6 +23,8 @@ source:
     # These are GNU extensions that require _GNU_SOURCE to be defined before including <stdio.h>.
     # qtwebengine/src/3rdparty/chromium/third_party/libdrm/src/xf86drm.c:362:9: error: implicit declaration of function 'asprintf'; did you mean 'vsprintf'?
     - patches/0010-Add-gnu-resource.patch
+    - patches/0011-fix-missing-eglext-angle-include-on-linux-for-chromi.patch
+    - patches/0012-v8-segmented-table-linux-aarch64-64kb.patch
 
     # conda-forge specific patch to build with sysroot_linux 2.17.*
     - patches/0030-chromium-cos7.patch
@@ -50,7 +52,6 @@ requirements:
         - bison
         - gperf
         - pkg-config
-        # - libtool
       else:
         - winflexbison
         - m2-gperf
@@ -71,7 +72,6 @@ requirements:
         - libdrm
         - libgl-devel
         - libglx-devel
-        #- libprotobuf
         - libxcb
         - libxkbcommon
         - libxkbfile
@@ -82,9 +82,10 @@ requirements:
         - lcms2
         - freetype
     - glib
+    - spirv-headers
+    - spirv-tools
     - html5lib
     - harfbuzz
-    # - lcms2
     - libevent
     - libtiff
     - libpng
@@ -150,7 +151,7 @@ about:
   summary: Qt WebEngine
   description: |
     Provides support for web applications using the Chromium browser project.
-  documentation: http://doc.qt.io/
+  documentation: https://doc.qt.io
   repository: https://github.com/qt/qtwebengine
 
 extra:

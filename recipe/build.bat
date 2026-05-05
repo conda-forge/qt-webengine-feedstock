@@ -84,3 +84,8 @@ if errorlevel 1 exit 1
 
 xcopy /y /s %LIBRARY_PREFIX%\lib\qt6\bin\Qt6WebEngine*.dll %LIBRARY_PREFIX%\bin
 if errorlevel 1 exit 1
+
+del %LIBRARY_PREFIX%\bin\QtWebEngineProcess
+if errorlevel 1 exit 1
+del %LIBRARY_PREFIX%\bin\QtWebEngineProcess6
+if errorlevel 1 exit 1
