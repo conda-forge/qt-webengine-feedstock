@@ -1,27 +1,33 @@
-MACOSX_DEPLOYMENT_TARGET:
-- '11.0'
-MACOSX_SDK_VERSION:
-- '15.5'
+alsa_lib:
+- '1.2'
 c_compiler:
-- clang
+- gcc
 c_compiler_version:
-- '19'
+- '14'
 c_stdlib:
-- macosx_deployment_target
+- sysroot
 c_stdlib_version:
-- '11.0'
+- '2.17'
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- clangxx
+- gxx
 cxx_compiler_version:
-- '19'
+- '14'
+dbus:
+- '1'
+docker_image:
+- quay.io/condaforge/linux-anvil-aarch64:alma9
+expat:
+- '2'
+fontconfig:
+- '2'
 freetype:
 - '2'
 github_actions_labels:
-- blacksmith-6vcpu-macos-latest
+- blacksmith-16vcpu-ubuntu-2404-arm
 glib:
 - '2'
 lcms2:
@@ -32,10 +38,16 @@ libpng:
 - '1.6'
 libtiff:
 - '4.7'
+libudev:
+- '257'
+libxcb:
+- '1'
 libxml2_devel:
 - '2.14'
-macos_machine:
-- arm64-apple-darwin20.0.0
+nspr:
+- '4'
+nss:
+- '3'
 openjpeg:
 - '2'
 perl:
@@ -47,7 +59,7 @@ snappy:
 spirv_tools:
 - '2026'
 target_platform:
-- osx-arm64
+- linux-aarch64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version

@@ -28,6 +28,8 @@ re2:
 - 2025.11.05
 snappy:
 - '1.2'
+spirv_tools:
+- '2026'
 target_platform:
 - win-64
 zlib:
