@@ -35,8 +35,6 @@ source:
 build:
   number: 0
   skip:
-    # requires libgbm
-    - linux and aarch64
     # cannot cross-compile
     - osx and x86_64
 
