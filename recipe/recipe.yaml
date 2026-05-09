@@ -68,6 +68,7 @@ requirements:
         - fontconfig
         - libcups
         - libdrm
+        - libgbm
         - libgl-devel
         - libglx-devel
         - libxcb
