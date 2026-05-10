@@ -11,7 +11,7 @@ Summary: Qt WebEngine
 
 Development: https://github.com/qt/qtwebengine
 
-Documentation: http://doc.qt.io/
+Documentation: https://doc.qt.io/
 
 Provides support for web applications using the Chromium browser project.
 

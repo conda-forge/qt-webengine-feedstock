@@ -24,10 +24,16 @@ index eb153344015..096ad078589 100644
 +#ifndef F_GET_SEALS
 +#define F_GET_SEALS 1034
 +#endif
++#ifndef MFD_CLOEXEC
++#define MFD_CLOEXEC 0x0001U
++#endif
++#ifndef MFD_ALLOW_SEALING
++#define MFD_ALLOW_SEALING 0x0002U
++#endif
 +
- #include "base/notreached.h"
- #include "base/synchronization/synchronization_buildflags.h"
- #include "build/build_config.h"
+ #include "base/allocator/partition_alloc_features.h"
+ #include "base/android/background_thread_pool_field_trial.h"
+ #include "base/feature_list.h"
 diff --git a/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc b/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 index df2567f7498..cbba2a20fd6 100644
 --- a/src/3rdparty/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
