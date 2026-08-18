@@ -11,19 +11,14 @@ we disable the feature.
  1 file changed, 4 deletions(-)
 
 diff --git a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
-index 600d4ed78437..3a747a04f932 100644
+index c5d1b119c0..55c08ff195 100644
 --- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
 +++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/aarch64_support.h
-@@ -10,10 +10,6 @@
- #include "partition_alloc/build_config.h"
- #include "partition_alloc/buildflags.h"
-
--#if PA_BUILDFLAG(IS_ANDROID) || PA_BUILDFLAG(IS_LINUX)
+@@ -19,7 +19,6 @@
+ // SDK), so only enable HW capability detection when the header is present.
+ #if (PA_BUILDFLAG(IS_ANDROID) || PA_BUILDFLAG(IS_LINUX)) && \
+     __has_include(<sys/ifunc.h>)
 -#define HAS_HW_CAPS
--#endif
--
+ #endif
+ 
  #if PA_BUILDFLAG(PA_ARCH_CPU_ARM64) && defined(HAS_HW_CAPS)
- #include <asm/hwcap.h>
- #include <sys/ifunc.h>
---
-2.49.0
