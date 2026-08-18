@@ -19,7 +19,14 @@ Current build status
 ====================
 
 
-<table>
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/qt-webengine-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/qt-webengine-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
 </table>
 
 Current release info
@@ -39,31 +46,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `qt6-webengine` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install qt6-webengine
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install qt6-webengine
 ```
 
-It is possible to list all of the versions of `qt6-webengine` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add qt6-webengine
+# for installing globally
+pixi global install qt6-webengine
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `qt6-webengine` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search qt6-webengine --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search qt6-webengine --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search qt6-webengine --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -75,6 +124,8 @@ mamba repoquery whoneeds qt6-webengine --channel conda-forge
 # List dependencies of `qt6-webengine`:
 mamba repoquery depends qt6-webengine --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
