@@ -64,6 +64,14 @@ else
   then
     ln -sv $BUILD_PREFIX/bin/${NM} $BUILD_PREFIX/bin/nm
   fi
+  if ! test -f $BUILD_PREFIX/bin/clang
+  then
+    ln -sv $BUILD_PREFIX/bin/${CC} $BUILD_PREFIX/bin/clang
+  fi
+  if ! test -f $BUILD_PREFIX/bin/clang++
+  then
+    ln -sv $BUILD_PREFIX/bin/${CPP} $BUILD_PREFIX/bin/clang++
+  fi
 
   # gn_run_binary.py nasm: Library not loaded: @rpath/libc++.1.dylib
   export DYLD_FALLBACK_LIBRARY_PATH=${PREFIX}/lib
