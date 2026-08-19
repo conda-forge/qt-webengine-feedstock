@@ -7,7 +7,7 @@ azure:
       CONDA_BLD_PATH: C:\bld\
       MINIFORGE_HOME: C:\Miniforge
 build_platform:
-  osx_64: osx64
+  osx_64: osx_64
 conda_build:
   pkg_format: '2'
 conda_build_tool: rattler-build
