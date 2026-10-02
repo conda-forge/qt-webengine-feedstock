@@ -40,10 +40,12 @@ libtiff:
 - '4.7'
 libudev:
 - '257'
+libvpx:
+- '1.17'
 libxcb:
 - '1'
 libxml2_devel:
-- '2.14'
+- '2.15'
 nspr:
 - '4'
 nss:
