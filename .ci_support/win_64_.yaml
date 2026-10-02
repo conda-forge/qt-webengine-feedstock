@@ -19,7 +19,7 @@ libpng:
 libtiff:
 - '4.7'
 libxml2_devel:
-- '2.14'
+- '2.15'
 openjpeg:
 - '2'
 perl:

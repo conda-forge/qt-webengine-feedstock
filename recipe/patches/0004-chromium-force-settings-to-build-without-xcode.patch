@@ -12,13 +12,13 @@ different macos sdk version.
  1 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/src/3rdparty/chromium/build/config/mac/mac_sdk.gni b/src/3rdparty/chromium/build/config/mac/mac_sdk.gni
-index 6ce9811..c53e84d 100644
+index c379b3f..e865bf5 100644
 --- a/src/3rdparty/chromium/build/config/mac/mac_sdk.gni
 +++ b/src/3rdparty/chromium/build/config/mac/mac_sdk.gni
-@@ -128,13 +128,13 @@ if (mac_use_xcode_symlinks) {
+@@ -131,13 +131,13 @@ if (mac_use_xcode_symlinks) {
  }
  sdk_info_args += [ mac_sdk_name ]
-
+ 
 -_mac_sdk_result = exec_script(script_name, sdk_info_args, "scope")
 -xcode_version = _mac_sdk_result.xcode_version
 -xcode_version_int = _mac_sdk_result.xcode_version_int
@@ -33,9 +33,6 @@ index 6ce9811..c53e84d 100644
 +#if (mac_sdk_path == "" && use_system_xcode && use_remoteexec) {
 +#  mac_sdk_path = _mac_sdk_result.sdk_path
 +#}
-
+ 
  if (use_system_xcode) {
    # The tool will print the SDK path on the first line, and the version on the
--- 
-2.39.2 (Apple Git-143)
-

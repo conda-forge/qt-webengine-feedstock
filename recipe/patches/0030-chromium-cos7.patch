@@ -1,8 +1,8 @@
-diff --git a/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc b/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
-index 0040a037f34..9fecb3e5fd7 100644
+diff --git a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
+index 9133e5f..029d282 100644
 --- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
 +++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_address_space.cc
-@@ -37,6 +37,25 @@
+@@ -43,6 +43,25 @@
  #include <sys/mman.h>
  #endif
  
@@ -28,12 +28,12 @@ index 0040a037f34..9fecb3e5fd7 100644
  namespace partition_alloc::internal {
  
  #if PA_BUILDFLAG(HAS_64_BIT_POINTERS)
-diff --git a/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc b/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
-index a025fd2dc43..1f61ca54b4f 100644
+diff --git a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
+index 2ff2779..39c1290 100644
 --- a/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
 +++ b/src/3rdparty/chromium/base/allocator/partition_allocator/src/partition_alloc/partition_root.cc
-@@ -51,6 +51,25 @@
- #endif  // PA_CONFIG(ENABLE_SHADOW_METADATA)
+@@ -55,6 +55,25 @@
+ #include <pthread.h>
  #endif  // PA_BUILDFLAG(IS_LINUX) || PA_BUILDFLAG(IS_CHROMEOS)
  
 +#if PA_BUILDFLAG(IS_LINUX)
@@ -58,8 +58,8 @@ index a025fd2dc43..1f61ca54b4f 100644
  namespace partition_alloc::internal {
  
  #if PA_BUILDFLAG(RECORD_ALLOC_INFO)
-diff --git a/chromium/mojo/core/channel_linux.cc b/chromium/mojo/core/channel_linux.cc
-index dd5edfce80e..08a3372066c 100644
+diff --git a/src/3rdparty/chromium/mojo/core/channel_linux.cc b/src/3rdparty/chromium/mojo/core/channel_linux.cc
+index 84c52a5..08747bf 100644
 --- a/src/3rdparty/chromium/mojo/core/channel_linux.cc
 +++ b/src/3rdparty/chromium/mojo/core/channel_linux.cc
 @@ -55,6 +55,25 @@

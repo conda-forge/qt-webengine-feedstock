@@ -1,8 +1,8 @@
-diff --git a/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index eb153344015..096ad078589 100644
+diff --git a/src/3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/src/3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+index e2085c0..9d3423b 100644
 --- a/src/3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ b/src/3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-@@ -22,6 +22,25 @@
+@@ -22,6 +22,31 @@
  #include <time.h>
  #include <unistd.h>
  
@@ -34,8 +34,8 @@ index eb153344015..096ad078589 100644
  #include "base/allocator/partition_alloc_features.h"
  #include "base/android/background_thread_pool_field_trial.h"
  #include "base/feature_list.h"
-diff --git a/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc b/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
-index df2567f7498..cbba2a20fd6 100644
+diff --git a/src/3rdparty/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc b/src/3rdparty/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
+index 1ea2f0f..c6058e8 100644
 --- a/src/3rdparty/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 +++ b/src/3rdparty/chromium/sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 @@ -6,7 +6,38 @@
@@ -78,8 +78,8 @@ index df2567f7498..cbba2a20fd6 100644
  #include <sys/socket.h>
  
  // Some arch's (arm64 for instance) unistd.h don't pull in symbols used here
-diff --git a/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc b/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc
-index e15be339bc0..3a87ba5c6dc 100644
+diff --git a/src/3rdparty/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc b/src/3rdparty/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc
+index fd3b1fc..7a54af6 100644
 --- a/src/3rdparty/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc
 +++ b/src/3rdparty/chromium/sandbox/policy/linux/bpf_hardware_video_decoding_policy_linux.cc
 @@ -4,7 +4,28 @@
@@ -112,8 +112,8 @@ index e15be339bc0..3a87ba5c6dc 100644
  
  #include "base/notreached.h"
  #include "media/gpu/buildflags.h"
-diff --git a/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc b/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc
-index b6240695269..9ec22366561 100644
+diff --git a/src/3rdparty/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc b/src/3rdparty/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc
+index 19d1f5d..1330001 100644
 --- a/src/3rdparty/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc
 +++ b/src/3rdparty/chromium/sandbox/policy/linux/bpf_network_policy_linux.cc
 @@ -11,7 +11,7 @@
