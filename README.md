@@ -39,10 +39,10 @@ Current release info
 Installing qt-webengine
 =======================
 
-Installing `qt-webengine` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `qt-webengine` from the `conda-forge/label/qt6-webengine_rc` channel can be achieved by adding `conda-forge/label/qt6-webengine_rc` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/qt6-webengine_rc
 conda config --set channel_priority strict
 ```
 
@@ -88,7 +88,7 @@ It is possible to list all of the versions of `qt6-webengine` available on your 
 <summary>With conda</summary>
 
 ```
-conda search qt6-webengine --channel conda-forge
+conda search qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 ```
 
 </details>
@@ -97,7 +97,7 @@ conda search qt6-webengine --channel conda-forge
 <summary>With mamba</summary>
 
 ```
-mamba search qt6-webengine --channel conda-forge
+mamba search qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 ```
 
 </details>
@@ -106,7 +106,7 @@ mamba search qt6-webengine --channel conda-forge
 <summary>With pixi</summary>
 
 ```
-pixi search qt6-webengine --channel conda-forge
+pixi search qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 ```
 
 </details>
@@ -116,13 +116,13 @@ pixi search qt6-webengine --channel conda-forge
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search qt6-webengine --channel conda-forge
+mamba repoquery search qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 
 # List packages depending on `qt6-webengine`:
-mamba repoquery whoneeds qt6-webengine --channel conda-forge
+mamba repoquery whoneeds qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 
 # List dependencies of `qt6-webengine`:
-mamba repoquery depends qt6-webengine --channel conda-forge
+mamba repoquery depends qt6-webengine --channel conda-forge/label/qt6-webengine_rc
 ```
 
 </details>
@@ -195,7 +195,4 @@ Feedstock Maintainers
 =====================
 
 * [@conda-forge/qt-main](https://github.com/orgs/conda-forge/teams/qt-main/)
-
-
-<!-- dummy commit to enable rerendering -->
 
