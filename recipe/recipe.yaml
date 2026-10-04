@@ -26,6 +26,7 @@ source:
     - patches/0010-Add-gnu-resource.patch
     - patches/0011-fix-missing-eglext-angle-include-on-linux-for-chromi.patch
     - patches/0012-v8-segmented-table-linux-aarch64-64kb.patch
+    - patches/0013-chromium-add-missing-cross-thread-headers-webrtc.patch
 
     # conda-forge specific patch to build with sysroot_linux 2.17.*
     - patches/0030-chromium-cos7.patch
