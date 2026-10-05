@@ -1,14 +1,15 @@
 context:
-  version: "6.11.2"
-  maj_min: ${{ (version | split('.'))[:2] | join('.') }}
+  version: "6.140.0rc"
+  upstream_version: ${{ version | replace("rc", "-rc") }}
+  qt_version: "6.12.0"
 
 package:
   name: qt6-webengine
   version: ${{ version }}
 
 source:
-  url: https://download.qt.io/official_releases/qt/${{ maj_min }}/${{ version }}/submodules/qtwebengine-everywhere-src-${{ version }}.tar.xz
-  md5: a33984478c690295f2b7a3d153c5772d
+  url: https://download.qt.io/development_releases/qtwebengine/${{ upstream_version }}/qtwebengine-everywhere-src-${{ upstream_version }}.tar.xz
+  sha256: 61257967afd9803a1db6403e86ea25c4efff8fad479bda365a9d81bfd709f621
   patches:
     - patches/0001-chromium-add-conda-CDT-include-paths-to-include_dirs.patch
     - patches/0002-add-system-lib-options-to-cmake-files.patch
@@ -25,6 +26,7 @@ source:
     - patches/0010-Add-gnu-resource.patch
     - patches/0011-fix-missing-eglext-angle-include-on-linux-for-chromi.patch
     - patches/0012-v8-segmented-table-linux-aarch64-64kb.patch
+    - patches/0013-chromium-add-missing-cross-thread-headers-webrtc.patch
 
     # conda-forge specific patch to build with sysroot_linux 2.17.*
     - patches/0030-chromium-cos7.patch
@@ -33,7 +35,7 @@ source:
     - patches/0033-chromium-sandbox.patch
 
 build:
-  number: 1
+  number: 0
   skip:
     # cannot cross-compile
     - osx and x86_64
@@ -57,9 +59,9 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ compiler('cxx') }}
     - if: build_platform != target_platform
-      then: qt6-main ${{ version }}.*
+      then: qt6-main ${{ qt_version }}.*
   host:
-    - qt6-main ${{ version }}.*
+    - qt6-main ${{ qt_version }}.*
     - if: linux
       then:
         - dbus
@@ -110,7 +112,7 @@ requirements:
     - minizip
     - zlib
   run:
-    - qt6-main ${{ version }}.*
+    - qt6-main ${{ qt_version }}.*
   run_exports:
     - ${{ pin_subpackage('qt6-webengine', upper_bound='x.x') }}
 
