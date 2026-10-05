@@ -14,10 +14,25 @@ if [[ "${target_platform}" == linux-* ]]; then
     #
     # Chromium vendors minigbm, a discontinued Intel project, which uses compiler features not compatible with our
     # aarch64 gcc compiler.
+    cat > "${SRC_DIR}/node-with-timeout" <<EOF
+#!/bin/bash
+for attempt in 1 2 3; do
+  timeout -k 30 1200 "${BUILD_PREFIX}/bin/node" "\$@"
+  rc=\$?
+  if [[ \$rc -ne 124 && \$rc -ne 137 ]]; then
+    exit \$rc
+  fi
+  echo "attempt \$attempt timed out: node \$*" | tee -a "${SRC_DIR}/node-timeouts.log" >&2
+done
+exit \$rc
+EOF
+    chmod +x "${SRC_DIR}/node-with-timeout"
+
     CMAKE_ARGS="
       ${CMAKE_ARGS}
       -DQT_FEATURE_webengine_system_gbm=ON
       -DQT_FEATURE_webenginedriver=OFF
+      -DNodejs_EXECUTABLE=${SRC_DIR}/node-with-timeout
     "
   else
     CMAKE_ARGS="
@@ -164,6 +179,10 @@ cmake --log-level STATUS -S . -Bbuild -GNinja ${CMAKE_ARGS} \
   -DQT_FEATURE_webengine_system_zlib=ON
 
 cmake --build build --target install --config Release -j${CPU_COUNT}
+
+if [[ -f "${SRC_DIR}/node-timeouts.log" ]]; then
+  cat "${SRC_DIR}/node-timeouts.log"
+fi
 
 pushd "${PREFIX}"
 
