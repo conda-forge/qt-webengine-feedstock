@@ -2,6 +2,9 @@
 
 set -ex
 
+git submodule update --init --recursive --force
+
+
 if [[ "${target_platform}" == linux-* ]]; then
   CMAKE_ARGS="
     ${CMAKE_ARGS}
