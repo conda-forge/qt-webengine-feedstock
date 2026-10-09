@@ -115,17 +115,13 @@ requirements:
     - ${{ pin_subpackage('qt6-webengine', upper_bound='x.x') }}
 
 tests:
-  - script:
-      - if: unix
-        then:
-          - test -d $PREFIX/include/qt6/QtWebEngineWidgets
-          - test -d $PREFIX/include/qt6/QtPdfWidgets
-          - test -f $PREFIX/lib/libQt6WebEngineWidgets${SHLIB_EXT}
-          - test -f $PREFIX/lib/libQt6PdfWidgets${SHLIB_EXT}
-        else:
-          - if not exist %PREFIX%\\Library\\include\\qt6\\QtWebEngineWidgets exit 1
-          - if not exist %PREFIX%\\Library\\lib\\Qt6WebEngineWidgets.lib exit 1
-          - if not exist %PREFIX%\\Library\\bin\\Qt6WebEngineWidgets.dll exit 1
+  - package_contents:
+      include:
+        - qt6/QtWebEngineWidgets/QtWebEngineWidgets
+        - qt6/QtPdfWidgets/QtPdfWidgets
+      lib:
+        - Qt6WebEngineWidgets
+        - Qt6PdfWidgets
     requirements:
       run:
         - ${{ stdlib("c") }}
