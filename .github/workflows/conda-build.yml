@@ -61,7 +61,7 @@ jobs:
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
             build_platform: win-64
-            build_workspace_dir: D:\\bld\\
+            build_workspace_dir: D:\bld\
             docker_run_args: 
             free_disk_space: skip
             os: windows
@@ -79,6 +79,8 @@ jobs:
       run: |
         if [[ "$(uname -m)" == "x86_64" ]]; then
           docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
+        elif [[ "$(uname -m)" == "aarch64" ]]; then
+          docker run --rm --privileged --entrypoint /opt/docker/bin/register-binfmt ${{ matrix.DOCKER_IMAGE }} aarch64
         fi
 
     - name: Build on Linux
