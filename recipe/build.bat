@@ -49,6 +49,7 @@ cmake --log-level STATUS -S . -Bbuild -GNinja ^
     -DQT_FEATURE_webengine_qt_libjpeg=OFF ^
     -DQT_FEATURE_webengine_qt_libpng=OFF ^
     -DQT_FEATURE_webengine_qt_zlib=OFF ^
+    -DQT_FEATURE_webengine_rust_build=OFF ^
     -DQT_FEATURE_webengine_system_alsa=OFF ^
     -DQT_FEATURE_webengine_system_ffmpeg=OFF ^
     -DQT_FEATURE_webengine_system_freetype=OFF ^

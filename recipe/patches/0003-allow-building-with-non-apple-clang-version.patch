@@ -33,7 +33,7 @@ index 0d60a9b..411e871 100644
 +        (APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
          (ANDROID AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
          (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
-         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
 diff --git a/src/3rdparty/chromium/build/config/compiler/BUILD.gn b/src/3rdparty/chromium/build/config/compiler/BUILD.gn
 index 5b09666..e06f69d 100644
 --- a/src/3rdparty/chromium/build/config/compiler/BUILD.gn
