@@ -18,7 +18,7 @@ jobs:
         resize_partitions: false
         store_build_artifacts: false
         tools_install_dir: ~/miniforge3
-  timeoutInMinutes: 1
+  timeoutInMinutes: 360
   variables: {}
 
   steps:
