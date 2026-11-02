@@ -33,10 +33,7 @@ source:
     - patches/0033-chromium-sandbox.patch
 
 build:
-  number: 0
-  skip:
-    # cannot cross-compile
-    - osx and x86_64
+  number: 1
 
 requirements:
   build:
