@@ -18,6 +18,8 @@ cxx_compiler_version:
 - '21'
 freetype:
 - '2'
+github_actions_labels:
+- blacksmith-6vcpu-macos-latest
 glib:
 - '2'
 lcms2:
