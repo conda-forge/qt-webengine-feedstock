@@ -35,7 +35,7 @@ glib:
 lcms2:
 - '2'
 libevent:
-- 2.1.12
+- 2.1.13
 libpng:
 - '1.6'
 libtiff:
