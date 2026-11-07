@@ -13,15 +13,15 @@ github:
   branch_name: main
   tooling_branch_name: main
 provider:
-  linux_aarch64: github_actions
   linux_64: github_actions
+  linux_aarch64: github_actions
   osx_arm64: github_actions
   win_64: github_actions
 test: native_and_emulated
 workflow_settings:
   build_workspace_dir:
-    - os: win
-      value: D:\bld\
+  - os: win
+    value: D:\bld\
   tools_install_dir:
-    - os: win
-      value: D:\Miniforge
+  - os: win
+    value: D:\Miniforge
