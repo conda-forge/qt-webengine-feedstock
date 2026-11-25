@@ -1,7 +1,7 @@
 context:
   version: "6.140.0"
   maj_min: ${{ (version | split('.'))[:2] | join('.') }}
-  qt_version: "6.12.0"
+  qt_version: "6.12.1"
 
 package:
   name: qt6-webengine
@@ -34,7 +34,7 @@ source:
     - patches/0033-chromium-sandbox.patch
 
 build:
-  number: 0
+  number: 1
   skip:
     # cannot cross-compile
     - osx and x86_64
